@@ -21,7 +21,7 @@ $menuEntries = Array(
 	Array(
 		'text' => 'Weather Monitor',
 		'type' => 'content',
-		'page' => 'content.php',
+		'page' => 'settings.php',
 		'wrap' => 1
 	),
 #	Array(
