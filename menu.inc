@@ -12,42 +12,42 @@
 # help menu in this example template.
 
 $menuEntries = Array(
-	Array(
-		'text' => 'Template - Status',
-		'type' => 'status',
-		'page' => 'status.php',
-		'wrap' => 1
-	),
 #	Array(
-#		'text' => 'Template - Content Setup',
-#		'type' => 'content',
-#		'page' => 'content.php',
+#		'text' => 'Template - Status',
+#		'type' => 'status',
+#		'page' => 'status.php',
 #		'wrap' => 1
 #	),
+	Array(
+		'text' => 'Weather Monitor',
+		'type' => 'content',
+		'page' => 'content.php',
+		'wrap' => 1
+	),
 #	Array(
 #		'text' => 'Template - Output',
 #		'type' => 'output',
 #		'page' => 'output.php',
 #		'wrap' => 1
 #	),
+#	Array(
+#		'text' => 'Template - Help',
+#		'type' => 'help',
+#		'page' => 'help/help.php',
+#		'wrap' => 1
+#	),
 	Array(
-		'text' => 'Template - Help',
+		'text' => 'Weather Monitor',
 		'type' => 'help',
-		'page' => 'help/help.php',
+		'page' => 'https://github.com/almostengr/fpp-weather-monitor-plugin/documentation',
 		'wrap' => 1
 	),
-	Array(
-		'text' => 'Template - Home',
-		'type' => 'help',
-		'page' => 'https://github.com/almostengr/fpp-weather-monitor-plugin',
-		'wrap' => 1
-	),
-	Array(
-		'text' => 'Template - About',
-		'type' => 'help',
-		'page' => 'about.php',
-		'wrap' => 1
-	)
+#	Array(
+#		'text' => 'Template - About',
+#		'type' => 'help',
+#		'page' => 'about.php',
+#		'wrap' => 1
+#	)
 );
 
 ##############################################################################
@@ -76,4 +76,3 @@ foreach ($menuEntries as $entry)
 			$plugin, $entry['page'], $nopage, $entry['text']);
 	}
 }
-?>
