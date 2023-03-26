@@ -14,18 +14,9 @@
 			"branch": "remote",
 			"sha": "",
 			"dependencies": {
-			    // "plugins": [
-				// 	"fpp-plugin-CoolPlugin1",
-				// 	"fpp-plugin-CoolPlugin2"
-				// ],
-			    // "packages": [
-				// 	"system-package-name1",
-				// 	"system-package-name2"
-				// ],
-				// "scripts": [
-				// 	"Control/script-repository-script1",
-				// 	"PixelOverlay/script-repository-script2"
-				// ]
+			    "plugins": [],
+			    "packages": [],
+				"scripts": []
 			}
 		}
 	]
