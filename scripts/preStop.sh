@@ -1,4 +1,4 @@
 #!/bin/sh
 
-#echo "Running fpp-plugin-Template PreStop Script"
+#echo "Running fpp-weather-monitor-plugin PreStop Script"
 

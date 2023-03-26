@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# fpp-plugin-Template uninstall script
+# fpp-weather-monitor-plugin uninstall script
 
