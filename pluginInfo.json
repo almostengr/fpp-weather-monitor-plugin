@@ -1,8 +1,8 @@
 {
 	"repoName": "fpp-weather-monitor-plugin",
-	"name": "FPP Weather Monitor",
+	"name": "Weather Monitor",
 	"author": "Kenny Robinson (almostengr)",
-	"description": "Weather Monitor is plugin that can control your show based upon weather conditions.",
+	"description": "Weather Monitor is plugin that can control your show based upon weather data provided from the National Weather Service.",
 	"homeURL": "https://github.com/almostengr/fpp-weather-monitor-plugin",
 	"srcURL": "https://github.com/almostengr/fpp-weather-monitor-plugin.git",
 	"bugURL": "https://github.com/almostengr/fpp-weather-monitor-plugin/issues",
@@ -21,3 +21,4 @@
 		}
 	]
 }
+
