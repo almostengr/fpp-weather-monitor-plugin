@@ -3,7 +3,7 @@
 <body>
   <?php
   include_once '/opt/fpp/www/common.php';
-  require_once 'common.functions.inc';
+//  require_once 'common.functions.inc';
 
   // todo reference
   
@@ -27,13 +27,18 @@
   }
 
   // $locationCallSignFeedback = saveLocationCallSign($location);
-  $emailAddressFeedback = ""; // saveEmailAddress($emailAddress);
+  $emailAddressFeedback = "test"; // saveEmailAddress($emailAddress);
+// $errors = array{"test" , "another one"};
+  // $errors = array('first', 'second');
+$errors = array();
   ?>
+
+  <?php foreach($errors as $error) { echo "<div class='p-1 alert detract'>" . $error . "</div>"; } ?>
 
   <form method="post">
     <div class="form-group">
       <label for="stationId">Weather Station ID</label>
-      <input class="form-control" type="text" name="stationId" value="" required="required" placeholder="KMGM" />
+      <input class="form-control" type="text" name="stationId" value="" required="required" />
       <small id="stationIdHelp" class="form-text text-muted">
         Enter the NWS station ID that is nearest to you.
         This field, if left blank, will use the location set on the
@@ -41,20 +46,19 @@
         this field.
       </small>
     </div>
-    <button type="submit">Save Settings</button>
+    <button class="buttons" type="submit">Save Settings</button>
   </form>
   <form method="post">
     <div class="form-group">
       <label for="emailAddress">Email Address</label>
       <input class="form-control" type="text" name="emailAddress" value="" required="required"
         placeholder="falconuser@example.com" />
-      <div id="emailAddressFeedback" class="<?php echo $emailAddressFeedback; ?>">Invalid email address</div>
       <small id="emailAddressHelp" class="form-text text-muted">
         Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
         event.
       </small>
     </div>
-    <button type="submit">Save Settings</button>
+    <button class="buttons" type="submit">Save Settings</button>
   </form>
 </body>
 
