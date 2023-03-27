@@ -3,8 +3,8 @@
 <body>
   <?php
   include_once '/opt/fpp/www/common.php';
-//  require_once 'common.functions.inc';
-
+  //  require_once 'common.functions.inc';
+  
   // todo reference
   
 
@@ -30,10 +30,12 @@
   $emailAddressFeedback = "test"; // saveEmailAddress($emailAddress);
 // $errors = array{"test" , "another one"};
   // $errors = array('first', 'second');
-$errors = array();
+  $errors = array();
   ?>
 
-  <?php foreach($errors as $error) { echo "<div class='p-1 alert detract'>" . $error . "</div>"; } ?>
+  <?php foreach ($errors as $error) {
+    echo "<div class='p-1 alert detract'>" . $error . "</div>";
+  } ?>
 
   <form method="post">
     <div class="form-group">
@@ -59,6 +61,19 @@ $errors = array();
       </small>
     </div>
     <button class="buttons" type="submit">Save Settings</button>
+  </form>
+
+  <form>
+
+      <!-- 
+        todo additional fields to add to form
+        
+        weather condition string text
+        wind speed 
+        wind gust 
+        min temperature
+        max temperature
+     -->
   </form>
 </body>
 
