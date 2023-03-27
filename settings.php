@@ -3,7 +3,7 @@
 <body>
   <?php
   include_once '/opt/fpp/www/common.php';
-  //  require_once 'common.functions.inc';
+  // include_once 'services.inc';
   
   // todo reference
   
@@ -61,9 +61,6 @@
       </small>
     </div>
     <button class="buttons" type="submit">Save Settings</button>
-  </form>
-
-  <form>
 
       <!-- 
         todo additional fields to add to form
@@ -74,6 +71,47 @@
         min temperature
         max temperature
      -->
+    <div class="form-group">
+      <label for="weatherTextDescriptions">Weather Text Descriptions</label>
+      <input class="form-control" type="text" name="weatherTextDescriptions" value="" />
+      <small id="weatherTextDescriptionsHelp" class="form-text text-muted">
+        Enter the weather text descriptions, separated by semi-colons, should stop your show.
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="windSPeed">Wind Speed</label>
+      <input class="form-control" type="number" name="windSpeed" value="" />
+      <small id="windSpeedHelp" class="form-text text-muted">
+        Enter the wind speed, which the show should be stopped. Leave blank to not stop show for wind
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="emailAddress">Wind Gust</label>
+      <input class="form-control" type="text" name="emailAddress" value="" required="required"
+        placeholder="falconuser@example.com" />
+      <small id="emailAddressHelp" class="form-text text-muted">
+        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
+        event.
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="emailAddress">Min Temperature</label>
+      <input class="form-control" type="text" name="emailAddress" value="" required="required"
+        placeholder="falconuser@example.com" />
+      <small id="emailAddressHelp" class="form-text text-muted">
+        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
+        event.
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="emailAddress">Max Temperature</label>
+      <input class="form-control" type="text" name="emailAddress" value="" required="required"
+        placeholder="falconuser@example.com" />
+      <small id="emailAddressHelp" class="form-text text-muted">
+        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
+        event.
+      </small>
+    </div>
   </form>
 </body>
 

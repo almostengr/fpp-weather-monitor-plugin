@@ -1,6 +1,9 @@
 <?php
 
+include_once '/opt/fpp/www/common.php';
+
 define("GET", "GET");
+define("POST", "POST");
 
 abstract class BaseService
 {
@@ -44,7 +47,12 @@ abstract class BaseService
     }
 }
 
-final class NwsApiService extends BaseService
+interface IWeatherService
+{
+    public function getLatestObservations(): array; 
+}
+
+final class NwsApiService extends BaseService implements IWeatherService
 {
     function getHeaders(): array
     {
@@ -72,5 +80,18 @@ final class NwsApiService extends BaseService
     {
         $route = "https://api.weather.gov/stations/KMGM/observations/latest";
         return $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
+    }
+}
+
+final class FppApiService extends BaseService
+{
+    public function getShowStatus()
+    {
+
+    }
+
+    public function postStopPlaylistGracefully()
+    {
+
     }
 }
