@@ -104,7 +104,12 @@ final class FppApiService extends BaseApiService
     }
 }
 
-final class SettingsFormService
+interface ISettingsFormService
+{
+    
+}
+
+final class SettingsFormService implements ISettingsFormService
 {
     private array $errors;
 
@@ -118,26 +123,26 @@ final class SettingsFormService
         return ReadSettingFromFile("temperatureInF") == 0 ? false : true;
     }
 
-    private function convertKmhToMph($speedKmh)
+    private function convertKmhToMph($speedKmh): float
     {
         return $speedKmh / 1.609344;
     }
 
-    private function convertMphToKmh($speedMph)
+    private function convertMphToKmh($speedMph) : float
     {
         return $speedMph * 1.609344;
     }
 
-    public function updateSettings(string $nwsStationId, string $email, string $textDescription, string $windSpeed, string $gustSpeed)
+    public function saveSettings(string $nwsStationId, string $email, string $textDescription, string $windSpeed, string $gustSpeed)
     {
-        $this->saveWeatherStationId($variable);
-        $this->saveEmailAddress($variable);
-        $this->saveWeatherTextDescriptions($variable);
-        $this->saveMaxWindSpeed($variable);
-        $this->saveMaxGustSpeed($variable);
+        $this->setWeatherStationId($nwsStationId);
+        $this->setEmailAddress($email);
+        $this->setWeatherTextDescriptions($textDescription);
+        $this->setMaxWindSpeed($windSpeed);
+        $this->setMaxGustSpeed($gustSpeed);
     }
 
-    public function updateEmailAddress(string $emailAddress): void
+    private function setEmailAddress(string $emailAddress): void
     {
         $isValid = filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
 
@@ -146,18 +151,16 @@ final class SettingsFormService
             return;
         }
 
-        // return "Invalid email address";
         array_push($this->errors, "Invalid email address");
     }
 
-    public function getEmailAddress(): string
+    private function getEmailAddress(): string
     {
-        // return ReadSettingFromFile(EMAIL_ADDRESS_SETTING, WM_PLUGIN_NAME);
         $email = ReadSettingFromFile(EMAIL_ADDRESS_SETTING, WM_PLUGIN_NAME);
         return $email === false ? EMPTY_STRING : $email;
     }
 
-    public function updateWeatherStationId(string $stationId): void
+    private function setWeatherStationId(string $stationId): void
     {
         $existingStationId = ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME);
 
@@ -173,24 +176,22 @@ final class SettingsFormService
         $longitude = ReadSettingFromFile("Longitude");
 
         if (empty($latitude) || empty($longitude) || $latitude === false || $longitude === false) {
-            array_push($this->errors, "Longitude and latitude need to be set. Go to Content Setup > FPP Settings > System to set your shows location.");
+            array_push($this->errors, "Longitude and latitude need to be set. Go to Content Setup > FPP Settings > System to set your location.");
         }
 
         $nwsService = new NwsApiService();
         $stationId = $nwsService->getStationIdFromGpsCoordinates($latitude, $longitude);
 
         WriteSettingToFile(NWS_WEATHER_STATION_ID, $stationId, WM_PLUGIN_NAME);
-        // return EMPTY_STRING;
     }
 
     public function getWeatherStationId(): string
     {
         $stationId = ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME);
-        // return ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME);
         return $stationId === false ? EMPTY_STRING : $stationId;
     }
 
-    public function updateWeatherTextDescriptions(string $descriptions): void
+    private function setWeatherTextDescriptions(string $descriptions): void
     {
         WriteSettingToFile(WEATHER_DESCRIPTIONS, strtolower($descriptions), WM_PLUGIN_NAME);
         // return EMPTY_STRING;
@@ -198,12 +199,11 @@ final class SettingsFormService
 
     public function getWeatherTextDescriptions(): string
     {
-        // return ReadSettingFromFile(WEATHER_DESCRIPTIONS, WM_PLUGIN_NAME);
         $descriptions = ReadSettingFromFile(WEATHER_DESCRIPTIONS, WM_PLUGIN_NAME);
         return $descriptions === false ? EMPTY_STRING : $descriptions;
     }
 
-    public function updateMaxWindSpeed(string $windSpeedString): void
+    private function setMaxWindSpeed(string $windSpeedString): void
     {
         $windSpeed = (float) $windSpeedString;
 
@@ -216,7 +216,6 @@ final class SettingsFormService
         }
 
         WriteSettingToFile(MAX_WIND_SPEED, $windSpeed, WM_PLUGIN_NAME);
-        // return EMPTY_STRING;
     }
 
     public function getMaxWindSpeed(): float
@@ -250,7 +249,7 @@ final class SettingsFormService
         return $maxGustSpeed;
     }    
 
-    public function updateMaxGustSpeed(string $gustSpeedString): void
+    private function setMaxGustSpeed(string $gustSpeedString): void
     {
         $gustSpeed = (float) $gustSpeedString;
         
@@ -263,7 +262,6 @@ final class SettingsFormService
         }
 
         WriteSettingToFile(MAX_GUST_SPEED, $gustSpeed, WM_PLUGIN_NAME);
-        // return EMPTY_STRING;
     }
 
     public function getSpeedUnitText(): string

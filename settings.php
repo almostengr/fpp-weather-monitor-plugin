@@ -2,20 +2,20 @@
 
 <body>
   <?php
-  include_once 'services.inc';
+  include_once './services.inc';
   
   $settingService = new SettingsFormService();
   if (!empty($_POST))
   {
-    $settingService->updateSettings($_POST[NWS_WEATHER_STATION_ID], $_POST[EMAIL_ADDRESS_SETTING], $_POST[WEATHER_DESCRIPTIONS], $_POST[MAX_WIND_SPEED], $_POST[MAX_GUST_SPEED]);
+    $settingService->saveSettings($_POST[NWS_WEATHER_STATION_ID], $_POST[EMAIL_ADDRESS_SETTING], $_POST[WEATHER_DESCRIPTIONS], $_POST[MAX_WIND_SPEED], $_POST[MAX_GUST_SPEED]);
   }
   ?>
 
-  <form method="post">
-    <?php foreach ($settingService->getErrors() as $error) {
-      echo "<div class='p-1 alert detract'>" . $error . "</div>";
-    } ?>
+  <?php foreach ($settingService->getErrors() as $error) {
+    echo "<div class='p-1 alert detract'>" . $error . "</div>";
+  } ?>
 
+  <form method="post">
     <h2>General</h2>
     <div class="row">
       <div class="col-md-4">NWS Weather Station ID</div>
