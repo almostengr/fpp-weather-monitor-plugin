@@ -3,26 +3,16 @@
 <body>
   <?php
   include_once 'services.inc';
-
-  // todo reference
-  
-  $errors = array();
-
-  // todo
-  /// api.weather.gov/points/gps,coordinates   // get gps coordinates from fpp settings page
-  // then get the properties->observationStations URL from the response
-  // to go url
   
   $settingService = new SettingsFormService();
-
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $settingService->saveEmailAddress($_POST['emailAddress']);
+  if (!empty($_POST))
+  {
+    $settingService->updateSettings($_POST[NWS_WEATHER_STATION_ID], $_POST[EMAIL_ADDRESS_SETTING], $_POST[WEATHER_DESCRIPTIONS], $_POST[MAX_WIND_SPEED], $_POST[MAX_GUST_SPEED]);
   }
-
   ?>
 
   <form method="post">
-    <?php foreach ($errors as $error) {
+    <?php foreach ($settingService->getErrors() as $error) {
       echo "<div class='p-1 alert detract'>" . $error . "</div>";
     } ?>
 
@@ -51,14 +41,14 @@
 
     <h2>Wind</h2>
     <div class="row">
-      <div class="col-md-4">Max Wind Speed</div>
+      <div class="col-md-4">Max Wind Speed <?php echo $settingService->getSpeedUnitText(); ?></div>
       <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_WIND_SPEED; ?>"
           value="<?php echo $settingService->getMaxWindSpeed(); ?>" />
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">Max Gust Speed</div>
+      <div class="col-md-4">Max Gust Speed <?php echo $settingService->getSpeedUnitText(); ?></div>
       <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_GUST_SPEED; ?>"
           value="<?php echo $settingService->getMaxGustSpeed(); ?>" />
