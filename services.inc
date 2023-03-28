@@ -137,7 +137,7 @@ final class SettingsFormService
         $this->saveMaxGustSpeed($variable);
     }
 
-    public function saveEmailAddress(string $emailAddress): void
+    public function updateEmailAddress(string $emailAddress): void
     {
         $isValid = filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
 
@@ -157,7 +157,7 @@ final class SettingsFormService
         return $email === false ? EMPTY_STRING : $email;
     }
 
-    public function saveWeatherStationId(string $stationId): void
+    public function updateWeatherStationId(string $stationId): void
     {
         $existingStationId = ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME);
 
@@ -190,7 +190,7 @@ final class SettingsFormService
         return $stationId === false ? EMPTY_STRING : $stationId;
     }
 
-    public function saveWeatherTextDescriptions(string $descriptions): void
+    public function updateWeatherTextDescriptions(string $descriptions): void
     {
         WriteSettingToFile(WEATHER_DESCRIPTIONS, strtolower($descriptions), WM_PLUGIN_NAME);
         // return EMPTY_STRING;
@@ -203,7 +203,7 @@ final class SettingsFormService
         return $descriptions === false ? EMPTY_STRING : $descriptions;
     }
 
-    public function saveMaxWindSpeed(string $windSpeedString): void
+    public function updateMaxWindSpeed(string $windSpeedString): void
     {
         $windSpeed = (float) $windSpeedString;
 
@@ -250,7 +250,7 @@ final class SettingsFormService
         return $maxGustSpeed;
     }    
 
-    public function saveMaxGustSpeed(string $gustSpeedString): void
+    public function updateMaxGustSpeed(string $gustSpeedString): void
     {
         $gustSpeed = (float) $gustSpeedString;
         
