@@ -2,116 +2,70 @@
 
 <body>
   <?php
-  include_once '/opt/fpp/www/common.php';
-  // include_once 'services.inc';
-  
+  include_once 'services.inc';
+
   // todo reference
   
+  $errors = array();
 
   // todo
-/// api.weather.gov/points/gps,coordinates   // get gps coordinates from fpp settings page
-// then get the properties->observationStations URL from the response
-// to go url
+  /// api.weather.gov/points/gps,coordinates   // get gps coordinates from fpp settings page
+  // then get the properties->observationStations URL from the response
+  // to go url
   
+  $settingService = new SettingsFormService();
 
-  function saveEmailAddress(string $emailAddress)
-  {
-    $isValid = validateEmailAddress($emailAddress);
-
-    writeEmailAddress($emailAddress);
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $settingService->saveEmailAddress($_POST['emailAddress']);
   }
 
-  function validateEmailAddress(string $emailAddress)
-  {
-    return filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
-  }
-
-  // $locationCallSignFeedback = saveLocationCallSign($location);
-  $emailAddressFeedback = "test"; // saveEmailAddress($emailAddress);
-// $errors = array{"test" , "another one"};
-  // $errors = array('first', 'second');
-  $errors = array();
   ?>
 
-  <?php foreach ($errors as $error) {
-    echo "<div class='p-1 alert detract'>" . $error . "</div>";
-  } ?>
-
   <form method="post">
-    <div class="form-group">
-      <label for="stationId">Weather Station ID</label>
-      <input class="form-control" type="text" name="stationId" value="" required="required" />
-      <small id="stationIdHelp" class="form-text text-muted">
-        Enter the NWS station ID that is nearest to you.
-        This field, if left blank, will use the location set on the
-        <a href="/settings.php#settings-system">FPP Settings > System tab</a> to automatically populate
-        this field.
-      </small>
-    </div>
-    <button class="buttons" type="submit">Save Settings</button>
-  </form>
-  <form method="post">
-    <div class="form-group">
-      <label for="emailAddress">Email Address</label>
-      <input class="form-control" type="text" name="emailAddress" value="" required="required"
-        placeholder="falconuser@example.com" />
-      <small id="emailAddressHelp" class="form-text text-muted">
-        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
-        event.
-      </small>
-    </div>
-    <button class="buttons" type="submit">Save Settings</button>
+    <?php foreach ($errors as $error) {
+      echo "<div class='p-1 alert detract'>" . $error . "</div>";
+    } ?>
 
-      <!-- 
-        todo additional fields to add to form
-        
-        weather condition string text
-        wind speed 
-        wind gust 
-        min temperature
-        max temperature
-     -->
-    <div class="form-group">
-      <label for="weatherTextDescriptions">Weather Text Descriptions</label>
-      <input class="form-control" type="text" name="weatherTextDescriptions" value="" />
-      <small id="weatherTextDescriptionsHelp" class="form-text text-muted">
-        Enter the weather text descriptions, separated by semi-colons, should stop your show.
-      </small>
+    <h2>General</h2>
+    <div class="row">
+      <div class="col-md-4">NWS Weather Station ID</div>
+      <div class="col-md">
+        <input class="" type="text" name="<?php echo NWS_WEATHER_STATION_ID; ?>"
+          value="<?php echo $settingService->getWeatherStationId(); ?>" required="required" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="windSPeed">Wind Speed</label>
-      <input class="form-control" type="number" name="windSpeed" value="" />
-      <small id="windSpeedHelp" class="form-text text-muted">
-        Enter the wind speed, which the show should be stopped. Leave blank to not stop show for wind
-      </small>
+    <div class="row">
+      <div class="col-md-4">Email Address</div>
+      <div class="col-md">
+        <input class="" type="text" name="<?php echo EMAIL_ADDRESS_SETTING; ?>"
+          value="<?php echo $settingService->getEmailAddress(); ?>" required="required" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="emailAddress">Wind Gust</label>
-      <input class="form-control" type="text" name="emailAddress" value="" required="required"
-        placeholder="falconuser@example.com" />
-      <small id="emailAddressHelp" class="form-text text-muted">
-        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
-        event.
-      </small>
+    <div class="row">
+      <div class="col-md-4">Weather Text Descriptions</div>
+      <div class="col-md">
+        <input type="text" name="<?php echo WEATHER_DESCRIPTIONS; ?>"
+          value="<?php echo $settingService->getWeatherTextDescriptions(); ?>" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="emailAddress">Min Temperature</label>
-      <input class="form-control" type="text" name="emailAddress" value="" required="required"
-        placeholder="falconuser@example.com" />
-      <small id="emailAddressHelp" class="form-text text-muted">
-        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
-        event.
-      </small>
+
+    <h2>Wind</h2>
+    <div class="row">
+      <div class="col-md-4">Max Wind Speed</div>
+      <div class="col-md">
+        <input class="" type="number" name="<?php echo MAX_WIND_SPEED; ?>"
+          value="<?php echo $settingService->getMaxWindSpeed(); ?>" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="emailAddress">Max Temperature</label>
-      <input class="form-control" type="text" name="emailAddress" value="" required="required"
-        placeholder="falconuser@example.com" />
-      <small id="emailAddressHelp" class="form-text text-muted">
-        Email address is used to uniquely identify you to the NWS API and for you to be contacted if there is a security
-        event.
-      </small>
+    <div class="row">
+      <div class="col-md-4">Max Gust Speed</div>
+      <div class="col-md">
+        <input class="" type="number" name="<?php echo MAX_GUST_SPEED; ?>"
+          value="<?php echo $settingService->getMaxGustSpeed(); ?>" />
+      </div>
     </div>
+
+    <button class="buttons" type="submit">Save Settings</button>
   </form>
 </body>
 
