@@ -4,6 +4,7 @@ include_once './services.inc';
 
 $nwsApiService = new NwsApiService();
 $fppApiService = new FppApiService();
+$settingService = new SettingsFormService();
 
 while(true)
 {

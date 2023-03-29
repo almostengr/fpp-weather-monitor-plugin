@@ -2,11 +2,10 @@
 
 <body>
   <?php
-  include_once './services.inc';
-  
+  require_once './source/services.inc';
+
   $settingService = new SettingsFormService();
-  if (!empty($_POST))
-  {
+  if (!empty($_POST)) {
     $settingService->saveSettings($_POST[NWS_WEATHER_STATION_ID], $_POST[EMAIL_ADDRESS_SETTING], $_POST[WEATHER_DESCRIPTIONS], $_POST[MAX_WIND_SPEED], $_POST[MAX_GUST_SPEED]);
   }
   ?>
@@ -41,14 +40,20 @@
 
     <h2>Wind</h2>
     <div class="row">
-      <div class="col-md-4">Max Wind Speed <?php echo $settingService->getSpeedUnitText(); ?></div>
+      <div class="col-md-4">
+        Max Wind Speed
+        <?php echo $settingService->getSpeedUnitText(); ?>
+      </div>
       <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_WIND_SPEED; ?>"
           value="<?php echo $settingService->getMaxWindSpeed(); ?>" />
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">Max Gust Speed <?php echo $settingService->getSpeedUnitText(); ?></div>
+      <div class="col-md-4">
+        Max Gust Speed
+        <?php echo $settingService->getSpeedUnitText(); ?>
+      </div>
       <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_GUST_SPEED; ?>"
           value="<?php echo $settingService->getMaxGustSpeed(); ?>" />

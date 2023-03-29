@@ -2,10 +2,6 @@
 
 include_once '/opt/fpp/www/common.php';
 
-define("GET", "GET");
-define("POST", "POST");
-define("EMPTY_STRING", "");
-
 define("WM_PLUGIN_NAME", "weather_monitor");
 define("EMAIL_ADDRESS_SETTING", "emailAddressSetting");
 define("NWS_WEATHER_STATION_ID", "nwsWeatherStationId");
@@ -13,100 +9,16 @@ define("WEATHER_DESCRIPTIONS", "weatherDescriptions");
 define("MAX_WIND_SPEED", "maxWindSpeedKmH");
 define("MAX_GUST_SPEED", "maxGustSpeedKmH");
 
-abstract class BaseApiService
-{
-    protected function callAPI(string $method, string $url, array $data, array $headers = false, string $userAgent = EMPTY_STRING)
-    {
-        // todo https://weichie.com/blog/curl-api-calls-with-php/
-        $curl = curl_init();
-        switch ($method) {
-            case "POST":
-                curl_setopt($curl, CURLOPT_POST, 1);
-                if ($data)
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case "PUT":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                if ($data)
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            default:
-                if ($data)
-                    $url = sprintf("%s?%s", $url, http_build_query($data));
-        }
-
-        // OPTIONS:
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-
-        if (!empty($userAgent)) {
-            curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        }
-
-        // EXECUTE:
-        $result = curl_exec($curl);
-        if (!$result) {
-            die("Connection Failure");
-        }
-        curl_close($curl);
-        return json_decode($result, false);
-    }
-}
-
-interface IWeatherService
-{
-    public function getLatestObservations(): array;
-}
-
-final class NwsApiService extends BaseApiService implements IWeatherService
-{
-    function getHeaders(): array
-    {
-        return array(
-            "Content-Type" => "application/json",
-        );
-    }
-
-    function userAgent(): string
-    {
-        // todo get user email address
-        return "User-Agent: (myweatherapp.com, contact@myweatherapp.com)";
-    }
-
-    public function getStationIdFromGpsCoordinates(string $latitude, string $longitude): string
-    {
-        $pointsRoute = "https://api.weather.gov/points/" . $latitude . "," . $longitude; // 32.3546,-86.2629
-        $pointResponse = $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
-        $stationsResponse =
-            $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent());
-        return $stationsResponse->features->properties->stationIdentifer;
-    }
-
-    public function getLatestObservations(): array
-    {
-        $route = "https://api.weather.gov/stations/KMGM/observations/latest";
-        return $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
-    }
-}
-
-final class FppApiService extends BaseApiService
-{
-    public function getShowStatus()
-    {
-
-    }
-
-    public function postStopPlaylistGracefully()
-    {
-
-    }
-}
-
 interface ISettingsFormService
 {
-    
+    public function getErrors(): array;
+    public function saveSettings(string $nwsStationId, string $email, string $textDescription, string $windSpeed, string $gustSpeed);
+    public function getEmailAddress(): string;
+    public function getWeatherStationId(): string;
+    public function getWeatherTextDescriptions(): string;
+    public function getMaxWindSpeed(): float;
+    public function getMaxGustSpeed(): float;
+    public function getSpeedUnitText(): string;
 }
 
 final class SettingsFormService implements ISettingsFormService
@@ -128,7 +40,7 @@ final class SettingsFormService implements ISettingsFormService
         return $speedKmh / 1.609344;
     }
 
-    private function convertMphToKmh($speedMph) : float
+    private function convertMphToKmh($speedMph): float
     {
         return $speedMph * 1.609344;
     }
@@ -154,7 +66,7 @@ final class SettingsFormService implements ISettingsFormService
         array_push($this->errors, "Invalid email address");
     }
 
-    private function getEmailAddress(): string
+    public function getEmailAddress(): string
     {
         $email = ReadSettingFromFile(EMAIL_ADDRESS_SETTING, WM_PLUGIN_NAME);
         return $email === false ? EMPTY_STRING : $email;
@@ -172,15 +84,12 @@ final class SettingsFormService implements ISettingsFormService
             array_push($this->errors, "Station ID cannot be empty");
         }
 
-        $latitude = ReadSettingFromFile("Latitude");
-        $longitude = ReadSettingFromFile("Longitude");
+        // if (empty($latitude) || empty($longitude) || $latitude === false || $longitude === false) {
+        //     array_push($this->errors, "Longitude and latitude need to be set. Go to Content Setup > FPP Settings > System to set your location.");
+        // }
 
-        if (empty($latitude) || empty($longitude) || $latitude === false || $longitude === false) {
-            array_push($this->errors, "Longitude and latitude need to be set. Go to Content Setup > FPP Settings > System to set your location.");
-        }
-
-        $nwsService = new NwsApiService();
-        $stationId = $nwsService->getStationIdFromGpsCoordinates($latitude, $longitude);
+        // $nwsService = new NwsApiService();
+        // $stationId = $nwsService->getStationIdFromGpsCoordinates($latitude, $longitude);
 
         WriteSettingToFile(NWS_WEATHER_STATION_ID, $stationId, WM_PLUGIN_NAME);
     }
@@ -194,7 +103,6 @@ final class SettingsFormService implements ISettingsFormService
     private function setWeatherTextDescriptions(string $descriptions): void
     {
         WriteSettingToFile(WEATHER_DESCRIPTIONS, strtolower($descriptions), WM_PLUGIN_NAME);
-        // return EMPTY_STRING;
     }
 
     public function getWeatherTextDescriptions(): string
@@ -237,8 +145,7 @@ final class SettingsFormService implements ISettingsFormService
     {
         $maxGustSpeed = ReadSettingFromFile(MAX_GUST_SPEED, WM_PLUGIN_NAME);
 
-        if ($maxGustSpeed === false)
-        {
+        if ($maxGustSpeed === false) {
             return 999;
         }
 
@@ -247,12 +154,12 @@ final class SettingsFormService implements ISettingsFormService
         }
 
         return $maxGustSpeed;
-    }    
+    }
 
     private function setMaxGustSpeed(string $gustSpeedString): void
     {
         $gustSpeed = (float) $gustSpeedString;
-        
+
         if ($gustSpeed < 1) {
             array_push($this->errors, "Gust speed cannot be less than or equal to zero (0).");
         }
@@ -266,11 +173,16 @@ final class SettingsFormService implements ISettingsFormService
 
     public function getSpeedUnitText(): string
     {
-        if ($this->isTemperatureInF())
-        {
+        if ($this->isTemperatureInF()) {
             return " (MPH)";
         }
         return " (KMH)";
     }
 
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
 }
+
