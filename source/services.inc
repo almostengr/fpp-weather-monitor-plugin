@@ -9,6 +9,12 @@ define("WEATHER_DESCRIPTIONS", "weatherDescriptions");
 define("MAX_WIND_SPEED", "maxWindSpeedKmH");
 define("MAX_GUST_SPEED", "maxGustSpeedKmH");
 
+
+final class SettingsService
+{
+    public 
+}
+
 interface ISettingsFormService
 {
     public function getErrors(): array;
