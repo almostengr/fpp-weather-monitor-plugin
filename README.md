@@ -8,22 +8,22 @@
 * [Installation](#installation)
 * [Plugin Settings](#plugin-settings)
 * [Feature Requests and Bug Reports](#feature-requests-and-bug-reports)
-
+* [References](#references)
 
 ## Purpose
 
 Falcon Pi Player (FPP) Weather Monitor is a plugin that can stop your show based upon weather
 conditions.
-Some light show hosts do not run their show during inclement weather because
+Some light show hosts do not run their show during rain or inclement weather because
 of the adverse effects it can have on the light show equipment. This includes, but it not
 limited to electrical shorts, power outages, and props being blown away.
 
 ### How It Works
 
-This application is designed to get the weather information from the
-National Weather Service (NWS) via their API. Based on the values that you have entered in the plugin settings,
-the monitor will gracefully stop the show if the reported conditions have met or exceeded their
-configured values.
+When your show is playing, it will periodically pull the latest weather observations for the specified 
+location from the NWS API.
+If one or more of the configured values or thresholds are exceeded, the show will be stopped gracefully.
+The plugin will not make calls to the NWS API when the show is idle or paused.
 
 ### Known Limitations
 
@@ -67,7 +67,9 @@ GPS coordinates of your show entered in the FPP Settings (Status/Control > FPP S
 
 ### Email Address
 
-Enter your email address. This will be used to uniquely identify you to the NWS API and for you to be contacted if there is a security event.
+The NWS API does not use API keys or tokens. Instead they use the User Agent and email address as the 
+way to uniquely identify your requests. If a security event were to occur, you will be notified by the NWS
+at the email address that you provide.
 
 ### Weather Text Descriptions
 
@@ -76,11 +78,11 @@ enter these in this field. Each condition should be separated by commas or semic
 
 ### Max Wind Speed
 
-Enter the wind speed, that if exceeded, you show will be shut down by the monitor.
+Enter the wind speed, that if exceeded, the show will be stopped by the monitor.
 
 ### Max Gust Speed
 
-Enter the wind gust speed, that if exceeded, you show will be shut down by the monitor.
+Enter the wind gust speed, that if exceeded, the show will be stopped by the monitor.
 
 
 
