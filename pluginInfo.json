@@ -1,6 +1,6 @@
 {
 	"repoName": "fpp-weather-monitor-plugin",
-	"name": "Weather Monitor",
+	"name": "FPP Weather Monitor",
 	"author": "Kenny Robinson (almostengr)",
 	"description": "This plugin will stop your running show when the configured weather conditions are met or exceeded. Data used is acquired from the National Weather Service. This plugin requires FPP to have internet access.",
 	"homeURL": "https://github.com/almostengr/fpp-weather-monitor-plugin",

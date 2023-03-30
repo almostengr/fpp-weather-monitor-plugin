@@ -11,7 +11,8 @@ define("WEATHER_DESCRIPTIONS", "weatherDescriptions");
 define("MAX_WIND_SPEED", "maxWindSpeedKmH");
 define("MAX_GUST_SPEED", "maxGustSpeedKmH");
 define("WM_PLUGIN_NAME", "weather_monitor");
-define("MONITOR_DELAY_SECONDS", 300000);
+define("MONITOR_DELAY_TIME", 1800); // 30 minutes
+define("FPP_STATUS_CHECK_TIME", 30); // 3o seconds
 
 abstract class BaseService
 {
@@ -25,7 +26,7 @@ abstract class BaseService
 
     protected function isTemperatureInF(): bool
     {
-        return ReadSettingFromFile("temperatureInF") == 0 ? false : true;
+        return ReadSettingFromFile("temperatureInF") == 1;
     }
 
     protected function convertKmhToMph($speedKmh): float

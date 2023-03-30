@@ -4,7 +4,7 @@
 ## Table of Contents
 
 * [Purpose](#purpose)
-* [Pre-Configuration](#pre-configuration)
+* [Pre-Installation](#pre-installation)
 * [Installation](#installation)
 * [Plugin Settings](#plugin-settings)
 * [Feature Requests and Bug Reports](#feature-requests-and-bug-reports)
@@ -33,7 +33,7 @@ time data nor does it utilize forecasted weather conditions.
 
 
 
-## Pre-Configuration
+## Pre-Installation
 
 Before installing the plugin, be sure that you have completed the following tasks.
 
@@ -90,6 +90,7 @@ Enter the wind gust speed, that if exceeded, the show will be stopped by the mon
 
 To request a feature or report a bug, file an issue on the project repository at
 https://github.com/almostengr/fpp-weather-monitor-plugin/issues
+
 
 
 ## References

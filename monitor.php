@@ -7,34 +7,38 @@ require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingS
 $weatherService = new NwsApiWeatherService();
 $fppApiService = new FppApiService();
 $settingService = new SettingService();
-$lastWeatherCheckTimeSeconds = 0;
+$lastWeatherCheckTime = 0;
+$lastFppStatusCheckTime = 0;
+$status = array();
 
 while (true) {
     $currentTime = time();
-    if (($lastWeatherCheckTimeSeconds + MONITOR_DELAY_SECONDS) > $currentTime) {
-        continue;
-    }
 
-    $status = $fppApiService->getShowStatus();
-    if ($status->status_name == "idle" || $status->status_name == "paused") {
-        continue;
-    }
+    if (($lastFppStatusCheckTime - $currentTime) >= FPP_STATUS_CHECK_TIME)
+    {
+        $status = $fppApiService->getShowStatus();
+        $lastFppStatusCheckTime = $currentTime;
+    } // end getting FPP status
 
-    $observation = $weatherService->getLatestObservations();
-    $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
-    $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
-    $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
+    if (($status->status_name == "playing" && $lastWeatherCheckTime - $currentTime) >= MONITOR_DELAY_TIME)
+    {
+        $observation = $weatherService->getLatestObservations();
+        $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
+        $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
+        $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
 
-    // todo log the reported conditions
+        // todo log the reported conditions
 
-    if (
-        $observation->getGustSpeed() >= $gustThreshold ||
-        $observation->getWindSpeed() >= $windThreshold ||
-        str_contains(strtolower($textDescriptions), strtolower($observation->getDescription()))
-    ) {
-        $fppApiService->stopPlaylistGracefully();
-        // todo send notification when show is stopped
-    }
+        $lastWeatherCheckTimeSeconds = $currentTime;
 
-    $lastWeatherCheckTimeSeconds = $currentTime;
+        if (
+            $observation->getGustSpeed() >= $gustThreshold ||
+            $observation->getWindSpeed() >= $windThreshold ||
+            str_contains(strtolower($textDescriptions), strtolower($observation->getDescription()))
+        ) {
+            $fppApiService->stopPlaylistGracefully();
+            // todo send notification when show is stopped
+        }
+    } // end getting weather data
+    
 }
