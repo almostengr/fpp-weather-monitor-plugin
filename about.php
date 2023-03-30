@@ -1,6 +1,6 @@
 <div style="margin:0 auto;"> <br />
   <fieldset style="padding: 10px; border: 2px solid #000;">
-    <legend>Weather Monitor Plugin Info</legend>
+    <legend>Weather Monitor Plugin</legend>
     <div style="overflow: hidden; padding: 10px;">
       <div id='credits'>
         <b>Template Plugin Developed By:</b><br /><br />

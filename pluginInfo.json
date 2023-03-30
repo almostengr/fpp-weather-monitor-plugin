@@ -2,7 +2,7 @@
 	"repoName": "fpp-weather-monitor-plugin",
 	"name": "Weather Monitor",
 	"author": "Kenny Robinson (almostengr)",
-	"description": "Weather Monitor is plugin that can control your show based upon weather data provided from the National Weather Service.",
+	"description": "This plugin will stop your running show when the configured weather conditions are met or exceeded. Data used is acquired from the National Weather Service. This plugin requires FPP to have internet access.",
 	"homeURL": "https://github.com/almostengr/fpp-weather-monitor-plugin",
 	"srcURL": "https://github.com/almostengr/fpp-weather-monitor-plugin.git",
 	"bugURL": "https://github.com/almostengr/fpp-weather-monitor-plugin/issues",
@@ -14,11 +14,10 @@
 			"branch": "currentweather",
 			"sha": "",
 			"dependencies": {
-			    "plugins": [],
-			    "packages": [],
+				"plugins": [],
+				"packages": [],
 				"scripts": []
 			}
 		}
 	]
 }
-
