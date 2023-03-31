@@ -14,15 +14,25 @@ $status = array();
 while (true) {
     $currentTime = time();
 
-    if (($lastFppStatusCheckTime - $currentTime) >= FPP_STATUS_CHECK_TIME)
-    {
-        $status = $fppApiService->getShowStatus();
+    if (($lastFppStatusCheckTime - $currentTime) >= FPP_STATUS_CHECK_TIME) {
+        try {
+            $status = $fppApiService->getShowStatus();
+        } catch (Exception) {
+            // todo log what happened
+            continue;
+        }
+        
         $lastFppStatusCheckTime = $currentTime;
     } // end getting FPP status
 
-    if (($status->status_name == "playing" && $lastWeatherCheckTime - $currentTime) >= MONITOR_DELAY_TIME)
-    {
-        $observation = $weatherService->getLatestObservations();
+    if (($status->status_name == "playing" && $lastWeatherCheckTime - $currentTime) >= MONITOR_DELAY_TIME) {
+        try {
+            $observation = $weatherService->getLatestObservations();
+        } catch (Exception) {
+            // todo log what occurred here
+            continue;
+        }
+
         $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
         $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
         $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
@@ -40,5 +50,5 @@ while (true) {
             // todo send notification when show is stopped
         }
     } // end getting weather data
-    
+
 }

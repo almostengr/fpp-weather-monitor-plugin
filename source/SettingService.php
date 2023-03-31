@@ -48,6 +48,15 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 $value = $nwsApi->getStationIdFromGpsCoordinates();
                 break;
 
+            case NWS_WEATHER_ALERT_ZONE:
+                if (!empty($value)) {
+                    return;
+                }
+
+                $nwsApi = new NwsApiWeatherService();
+                $value = $nwsApi->getAlertZoneFromGpsCoordinates();
+                break;
+
             case MAX_GUST_SPEED:
                 $valueFloat = (float) $value;
                 if ($valueFloat < 1) {

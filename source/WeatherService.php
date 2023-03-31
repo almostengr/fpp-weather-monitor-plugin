@@ -9,7 +9,8 @@ interface WeatherServiceInterface
 
 interface NwsWeatherServiceInterface extends WeatherServiceInterface
 {
-    public function getStationIdFromGpsCoordinates(string $latitude, string $longitude): string;
+    public function getStationIdFromGpsCoordinates(): string;
+    public function getAlertZoneFromGpsCoordinates(): string;
 }
 
 final class NwsApiWeatherService extends BaseApiService implements NwsWeatherServiceInterface
@@ -19,7 +20,7 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         return "User-Agent: (FalconPiPlayer, " . ReadSettingFromFile(EMAIL_ADDRESS_SETTING, WM_PLUGIN_NAME) . ")";
     }
 
-    public function getStationIdFromGpsCoordinates(): string
+    private function getPointsDetailsFromGpsCoordinates()
     {
         $latitude = ReadSettingFromFile("Latitude");
         $longitude = ReadSettingFromFile("Longitude");
@@ -29,7 +30,19 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         }
 
         $pointsRoute = "https://api.weather.gov/points/" . $latitude . "," . $longitude;
-        $pointResponse = $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
+        return $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
+    }
+
+    public function getAlertZoneFromGpsCoordinates(): string
+    {
+        $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
+        $forecastZoneResponse = $this->callAPI(GET, $pointResponse->properties->forecastZone, array(), $this->getHeaders(), $this->userAgent());
+        return $forecastZoneResponse->properties->id;
+    }
+
+    public function getStationIdFromGpsCoordinates(): string
+    {
+        $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
         $stationsResponse =
             $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent());
         return $stationsResponse->features->properties->stationIdentifer;

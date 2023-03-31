@@ -10,6 +10,8 @@
 * [Feature Requests and Bug Reports](#feature-requests-and-bug-reports)
 * [References](#references)
 
+
+
 ## Purpose
 
 Falcon Pi Player (FPP) Weather Monitor is a plugin that can stop your show based upon weather

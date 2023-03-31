@@ -20,17 +20,18 @@ abstract class BaseApiService extends BaseService
                 if ($data)
                     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 break;
+
             case "PUT":
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
                 if ($data)
                     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 break;
+
             default:
                 if ($data)
                     $url = sprintf("%s?%s", $url, http_build_query($data));
         }
 
-        // OPTIONS:
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -40,12 +41,17 @@ abstract class BaseApiService extends BaseService
             curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         }
 
-        // EXECUTE:
-        $result = curl_exec($curl);
-        if (!$result) {
+        $response = curl_exec($curl);
+        if (!$response) {
             die("Connection Failure");
         }
+        $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         curl_close($curl);
-        return json_decode($result, false);
+
+        if ($responseCode >= 200 && $responseCode <= 299) {
+            return json_decode($response, false);
+        }
+
+        throw new Exception(json_encode(array("code" => $responseCode, "body" => $response)));
     }
 }

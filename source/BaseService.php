@@ -7,6 +7,7 @@ define("POST", "POST");
 define("EMPTY_STRING", "");
 define("EMAIL_ADDRESS_SETTING", "emailAddressSetting");
 define("NWS_WEATHER_STATION_ID", "nwsWeatherStationId");
+define("NWS_WEATHER_ALERT_ZONE", "nwsWeatherAlertZone");
 define("WEATHER_DESCRIPTIONS", "weatherDescriptions");
 define("MAX_WIND_SPEED", "maxWindSpeedKmH");
 define("MAX_GUST_SPEED", "maxGustSpeedKmH");
