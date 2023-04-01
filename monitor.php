@@ -14,7 +14,7 @@ $status = array();
 while (true) {
     $currentTime = time();
 
-    if (($lastFppStatusCheckTime - $currentTime) >= FPP_STATUS_CHECK_TIME) {
+    if (($currentTime - $lastFppStatusCheckTime) >= FPP_STATUS_CHECK_TIME) {
         try {
             $status = $fppApiService->getShowStatus();
         } catch (Exception $exception) {
@@ -25,8 +25,8 @@ while (true) {
         $lastFppStatusCheckTime = $currentTime;
     } // end getting FPP status
 
-    if (($status->status_name == "playing" && $lastWeatherCheckTime - $currentTime) >= MONITOR_DELAY_TIME) {
-        $observation;
+    if ($status->status_name == "playing" && ($currentTime - $lastWeatherCheckTime) >= MONITOR_DELAY_TIME) {
+        $observation = null;
 
         try {
             $observation = $weatherService->getLatestObservations();
@@ -50,5 +50,5 @@ while (true) {
             syslog(LOG_INFO, "Stopping show due to weather"); // todo send notification when show is stopped
         }
     } // end getting weather observation
-    
+// break;
 }
