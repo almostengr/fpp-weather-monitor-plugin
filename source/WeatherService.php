@@ -70,8 +70,8 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
 
 final class ObservationModel
 {
-    private float $windSpeedKmh;
-    private float $gustSpeedKmh;
+    private $windSpeedKmh;
+    private $gustSpeedKmh;
     private string $description;
 
     private function __construct(float $windSpeed, float $gustSpeed, string $description)
