@@ -33,7 +33,7 @@ if (!empty($_POST)) {
     </div>
 
     <div>
-      <h2>General</h2>
+      <h2 class="pt-2">General</h2>
       <div class="">NWS Weather Station ID</div>
       <div class="">
         <input class="" type="text" name="<?php echo NWS_WEATHER_STATION_ID; ?>"
@@ -63,7 +63,9 @@ if (!empty($_POST)) {
     </div>
 
     <div>
-      <h2>Wind</h2>
+      <h2 class="pt-2">Wind</h2>
+   </div>
+   <div class="pb-2">
       <div class="">
         Max Wind Speed
         <?php echo $settingService->getSpeedUnitText(); ?>
@@ -89,7 +91,7 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-    <button class="buttons" type="submit">Save Settings</button>
+    <button class="buttons my-2" type="submit">Save Settings</button>
   </form>
 </body>
 

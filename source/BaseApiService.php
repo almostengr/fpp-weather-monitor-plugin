@@ -11,7 +11,7 @@ abstract class BaseApiService extends BaseService
         );
     }
 
-    protected function callAPI(string $method, string $url, array $data = array(), array $headers = false, string $userAgent = EMPTY_STRING)
+    protected function callAPI(string $method, string $url, array $data = array(), array $headers = array(), string $userAgent = EMPTY_STRING)
     {
         $curl = curl_init();
         switch ($method) {

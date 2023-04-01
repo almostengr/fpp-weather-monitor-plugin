@@ -17,7 +17,7 @@ define("FPP_STATUS_CHECK_TIME", 30); // 3o seconds
 
 abstract class BaseService
 {
-    protected function getSpeedUnitText(): string
+    public function getSpeedUnitText(): string
     {
         if ($this->isTemperatureInF()) {
             return " (MPH)";
