@@ -32,6 +32,22 @@ if (!empty($_POST)) {
       </div>
     </div>
 
+<div class="row py-2">
+<div class="col-md-2 text-center">NWS Weather Station</div>
+<div>
+<input type="text">
+<div class="text-muted">
+Help information about the setting.
+</div>
+</div>
+</div>
+
+<div class="form-group">
+<label>NWS Weather Station</label>
+<input type="text">
+<div>This is some information about the weather station</div>
+</div>
+
     <div>
       <h2 class="pt-2">General</h2>
       <div class="">NWS Weather Station ID</div>
