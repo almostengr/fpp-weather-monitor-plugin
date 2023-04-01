@@ -21,14 +21,13 @@ if (!empty($_POST)) {
   foreach ($errors as $error) {
     if ($error !== true && !empty($error)) {
       echo "<div class='p-1 alert bg-danger text-white'>" . $error . "</div>";
-     continue;
+      continue;
     }
-$succeeded++;
+    $succeeded++;
   }
 
-  if(!empty($_POST) && sizeof($errors) == $succeeded)
-  {
-   echo "<div class='p-1 alert bg-success text-white'>Settings saved successfully</div>";
+  if (!empty($_POST) && sizeof($errors) == $succeeded) {
+    echo "<div class='p-1 alert bg-success text-white'>Settings saved successfully</div>";
   }
   ?>
 
@@ -71,7 +70,7 @@ $succeeded++;
         <input type="text" name="<?php echo WEATHER_DESCRIPTIONS; ?>"
           value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" class="form-control" />
         <div class="text-muted">
-	  List of weather descriptions, that if current, will have the monitor stop your show.
+          List of weather descriptions, that if current, will have the monitor stop your show.
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ limited to electrical shorts, power outages, and props being blown away.
 
 ### How It Works
 
-When your show is playing, it will periodically pull the latest weather observations for the specified 
+When your show is playing, it will periodically pull the latest weather observations for the specified
 location from the NWS API.
 If one or more of the configured values or thresholds are exceeded, the show will be stopped gracefully.
 The plugin will not make calls to the NWS API when the show is idle or paused.
@@ -64,13 +64,13 @@ Go to Status/Control > Weather Monitor (under Plugins) to modify the settings fo
 
 ### Weather Station ID
 
-If you know the weather station ID that is closest to your show, can enter it. Leaving this field blank,
+If you know the weather station ID that is closest to your show, can enter it. Entering "0000",
 will have the system automatically populate the station ID for you. Station ID is dependent upon the
 GPS coordinates of your show entered in the FPP Settings (Status/Control > FPP Settings > System tab).
 
 ### Email Address
 
-The NWS API does not use API keys or tokens. Instead they use the User Agent and email address as the 
+The NWS API does not use API keys or tokens. Instead they use the User Agent and email address as the
 way to uniquely identify your requests. If a security event were to occur, you will be notified by the NWS
 at the email address that you provide.
 
@@ -99,6 +99,11 @@ Enjoy using this plugin? Consider giving a donation to support the development e
 
 To request a feature or report a bug, file an issue on the project repository at
 https://github.com/almostengr/fpp-weather-monitor-plugin/issues
+
+### Reporting Issues
+
+When reporting issues, please be sure to include the contents of the apache2-error.log and any other recently
+modified log files in your issue request. Omitting these files will cause delays in providing fixes.
 
 
 

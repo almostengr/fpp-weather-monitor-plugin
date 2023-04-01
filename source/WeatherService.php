@@ -29,10 +29,8 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         }
 
         $pointsRoute = "https://api.weather.gov/points/" . $latitude . "," . $longitude;
-// error_log($pointsRoute);
         $result = $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
-// echo '<pre>' . print_r($result) . '</pre>';
-return $result;
+        return $result;
     }
 
     // todo for future release
@@ -48,10 +46,7 @@ return $result;
         $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
         $stationsResponse =
             $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent(), true);
-//        return $stationsResponse->features->0->properties->stationIdentifer;
-
-// $sResponse = (array)$stationsResponse;
-return $stationsResponse['features']['0']['properties']['stationIdentifier'];
+        return $stationsResponse['features']['0']['properties']['stationIdentifier'];
     }
 
     public function getLatestObservations(): ObservationModel
@@ -65,13 +60,13 @@ return $stationsResponse['features']['0']['properties']['stationIdentifier'];
         );
     }
 
-    // todo for future release
-    // public function getLatestAlerts()
-    // {
-    //     $route = "https://api.weather.gov/alerts/active/zone/" . ReadSettingFromFile(NWS_WEATHER_ALERT_ZONE, WM_PLUGIN_NAME);
-    //     $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
-    //     return $response;
-    // }
+// todo for future release
+// public function getLatestAlerts()
+// {
+//     $route = "https://api.weather.gov/alerts/active/zone/" . ReadSettingFromFile(NWS_WEATHER_ALERT_ZONE, WM_PLUGIN_NAME);
+//     $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
+//     return $response;
+// }
 }
 
 final class ObservationModel

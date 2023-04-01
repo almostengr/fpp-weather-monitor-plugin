@@ -50,5 +50,5 @@ while (true) {
             syslog(LOG_INFO, "Stopping show due to weather"); // todo send notification when show is stopped
         }
     } // end getting weather observation
-// break;
+
 }
