@@ -24,18 +24,18 @@ if (!empty($_POST)) {
   }
   ?>
   <form method="post">
-    <h2>Donate</h2>
-    <div class="row">
-      <div class="col-md-4">Donate</div>
-      <div class="col-md">
+    <div>
+      <h2>Donate</h2>
+      <div class="">Donate</div>
+      <div class="">
         Enjoy using this plugin? Please make a donation to support the future of this plugin.
       </div>
     </div>
 
-    <h2>General</h2>
-    <div class="row">
-      <div class="col-md-4">NWS Weather Station ID</div>
-      <div class="col-md">
+    <div>
+      <h2>General</h2>
+      <div class="">NWS Weather Station ID</div>
+      <div class="">
         <input class="" type="text" name="<?php echo NWS_WEATHER_STATION_ID; ?>"
           value="<?php echo $settingService->getSetting(NWS_WEATHER_STATION_ID); ?>" required="required" />
         <div>
@@ -43,10 +43,8 @@ if (!empty($_POST)) {
           FPP Settings > System.
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">Email Address</div>
-      <div class="col-md">
+      <div class="">Email Address</div>
+      <div class="">
         <input class="" type="text" name="<?php echo EMAIL_ADDRESS_SETTING; ?>"
           value="<?php echo $settingService->getSetting(EMAIL_ADDRESS_SETTING); ?>" required="required" />
         <div>
@@ -56,34 +54,33 @@ if (!empty($_POST)) {
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4">Weather Text Descriptions</div>
-      <div class="col-md">
+    <div>
+      <div class="">Weather Text Descriptions</div>
+      <div class="">
         <input type="text" name="<?php echo WEATHER_DESCRIPTIONS; ?>"
           value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" />
       </div>
     </div>
 
-    <h2>Wind</h2>
-    <div class="row">
-      <div class="col-md-4">
+    <div>
+      <h2>Wind</h2>
+      <div class="">
         Max Wind Speed
         <?php echo $settingService->getSpeedUnitText(); ?>
       </div>
-      <div class="col-md">
+      <div class="">
         <input class="" type="number" name="<?php echo MAX_WIND_SPEED; ?>"
           value="<?php echo $settingService->getSetting(MAX_WIND_SPEED); ?>" required="required" />
         <div>
           Enter the wind speed that if exceeded, your show will be stopped by the monitor.
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
+
+      <div class="">
         Max Gust Speed
         <?php echo $settingService->getSpeedUnitText(); ?>
       </div>
-      <div class="col-md">
+      <div class="">
         <input class="" type="number" name="<?php echo MAX_GUST_SPEED; ?>"
           value="<?php echo $settingService->getSetting(MAX_GUST_SPEED); ?>" required="required" />
         <div>
