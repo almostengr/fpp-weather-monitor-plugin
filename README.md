@@ -60,7 +60,7 @@ https://raw.githubusercontent.com/almostengr/fpp-weather-monitor-plugin/main/plu
 
 ## Plugin Settings
 
-Go to Content Setup > Weather Monitor (under Plugins) to modify the settings for this plugin.
+Go to Status/Control > Weather Monitor (under Plugins) to modify the settings for this plugin.
 
 ### Weather Station ID
 

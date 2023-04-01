@@ -17,36 +17,44 @@ if (!empty($_POST)) {
 
 <body>
   <?php
+  $succeeded = 0;
   foreach ($errors as $error) {
-    if ($error !== true) {
-      echo "<div class='p-1 alert detract'>" . $error . "</div>";
+    if ($error !== true && !empty($error)) {
+      echo "<div class='p-1 alert bg-danger text-white'>" . $error . "</div>";
+     continue;
     }
+$succeeded++;
+  }
+
+  if(!empty($_POST) && sizeof($errors) == $succeeded)
+  {
+   echo "<div class='p-1 alert bg-success text-white'>Settings saved successfully</div>";
   }
   ?>
 
   <form method="post">
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">Donate</div>
-      <div>
+      <div class="col-md">
         Enjoy using this plugin? Please make a donation to support the future of this plugin.
       </div>
     </div>
 
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">NWS Weather Station ID</div>
-      <div>
+      <div class="col-md">
         <input class="" type="text" name="<?php echo NWS_WEATHER_STATION_ID; ?>"
           value="<?php echo $settingService->getSetting(NWS_WEATHER_STATION_ID); ?>" required="required" />
         <div class="text-muted">
-          If left blank, station ID will automatically be populated from the GPS coordinates entered at Status/Control >
-          FPP Settings > System.
+          Enter "0000" to automatically populate the closest weather station using the GPS coordinates entered
+          on Status/Control > FPP Settings > System tab.
         </div>
       </div>
     </div>
 
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">Email Address</div>
-      <div>
+      <div class="col-md">
         <input class="" type="text" name="<?php echo EMAIL_ADDRESS_SETTING; ?>"
           value="<?php echo $settingService->getSetting(EMAIL_ADDRESS_SETTING); ?>" required="required" />
         <div class="text-muted">
@@ -57,22 +65,23 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">Weather Text Descriptions</div>
-      <div>
+      <div class="col-md">
         <input type="text" name="<?php echo WEATHER_DESCRIPTIONS; ?>"
-          value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" />
+          value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" class="form-control" />
         <div class="text-muted">
+	  List of weather descriptions, that if current, will have the monitor stop your show.
         </div>
       </div>
     </div>
 
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">
         Max Wind Speed
         <?php echo $settingService->getSpeedUnitText(); ?>
       </div>
-      <div>
+      <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_WIND_SPEED; ?>"
           value="<?php echo $settingService->getSetting(MAX_WIND_SPEED); ?>" required="required" />
         <div class="text-muted">
@@ -81,12 +90,12 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-    <div class="row my-2">
+    <div class="row my-3">
       <div class="col-md-2 text-center">
         Max Gust Speed
         <?php echo $settingService->getSpeedUnitText(); ?>
       </div>
-      <div>
+      <div class="col-md">
         <input class="" type="number" name="<?php echo MAX_GUST_SPEED; ?>"
           value="<?php echo $settingService->getSetting(MAX_GUST_SPEED); ?>" required="required" />
         <div class="text-muted">
@@ -95,7 +104,7 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-    <button class="buttons my-2" type="submit">Save Settings</button>
+    <button class="buttons my-3" type="submit">Save Settings</button>
   </form>
 </body>
 

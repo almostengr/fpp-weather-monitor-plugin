@@ -29,7 +29,10 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         }
 
         $pointsRoute = "https://api.weather.gov/points/" . $latitude . "," . $longitude;
-        return $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
+// error_log($pointsRoute);
+        $result = $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
+// echo '<pre>' . print_r($result) . '</pre>';
+return $result;
     }
 
     // todo for future release
@@ -44,8 +47,11 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
     {
         $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
         $stationsResponse =
-            $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent());
-        return $stationsResponse->features->properties->stationIdentifer;
+            $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent(), true);
+//        return $stationsResponse->features->0->properties->stationIdentifer;
+
+// $sResponse = (array)$stationsResponse;
+return $stationsResponse['features']['0']['properties']['stationIdentifier'];
     }
 
     public function getLatestObservations(): ObservationModel

@@ -40,8 +40,8 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 break;
 
             case NWS_WEATHER_STATION_ID:
-                if (!empty($value)) {
-                    return;
+                if (!empty($value) && $value != "0000") {
+                    break;
                 }
 
                 $nwsApi = new NwsApiWeatherService();

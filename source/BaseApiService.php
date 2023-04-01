@@ -11,7 +11,7 @@ abstract class BaseApiService extends BaseService
         );
     }
 
-    protected function callAPI(string $method, string $url, array $data = array(), array $headers = array(), string $userAgent = EMPTY_STRING)
+    protected function callAPI(string $method, string $url, array $data = array(), array $headers = array(), string $userAgent = EMPTY_STRING, bool $returnArray = false)
     {
         $curl = curl_init();
         switch ($method) {
@@ -49,7 +49,7 @@ abstract class BaseApiService extends BaseService
         curl_close($curl);
 
         if ($responseCode >= 200 && $responseCode <= 299) {
-            return json_decode($response, false);
+            return json_decode($response, $returnArray);
         }
 
         throw new Exception(json_encode(array("code" => $responseCode, "body" => $response)));
