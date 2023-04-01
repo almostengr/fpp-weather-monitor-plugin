@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # fpp-weather-monitor-plugin install script
-echo "Set the plugin configuration from the Status/Control menu"
+echo "Please set the plugin configuration from the Status/Control menu."

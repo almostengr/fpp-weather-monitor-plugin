@@ -1,18 +1,5 @@
 # FPP Weather Monitor
 
-
-## Table of Contents
-
-* [Purpose](#purpose)
-* [Pre-Installation](#pre-installation)
-* [Installation](#installation)
-* [Plugin Settings](#plugin-settings)
-* [Donations](#donations)
-* [Feature Requests and Bug Reports](#feature-requests-and-bug-reports)
-* [References](#references)
-
-
-
 ## Purpose
 
 Falcon Pi Player (FPP) Weather Monitor is a plugin that can stop your show based upon weather
@@ -34,81 +21,10 @@ The plugin will not make calls to the NWS API when the show is idle or paused.
 For that reason, this plugin is designed to poll the NWS API twice per hour. This plugin cannot get real
 time data nor does it utilize forecasted weather conditions.
 
+## User Guide
 
+Project documentation and user guide can be viewed in the [User Guide](./user_guide/) folder.
 
-## Pre-Installation
-
-Before installing the plugin, be sure that you have completed the following tasks.
-
-* Set the Latitude and Longitude for your location on the Status/Control > FPP Settings > System tab.
-* Confirm the "Temperature display units" setting is set correctly to your preference on the Status/Control > FPP Settings > UI tab.
-* Your show has access to the internet.
-
-
-
-## Installation
-
-To install this plugin
-
-* Copy and paste the following URL on the Plugin Manger page (Content Setup > Plugin Manager).
-https://raw.githubusercontent.com/almostengr/fpp-weather-monitor-plugin/main/pluginInfo.json
-* Click Get Plugin Info button
-* The plugin will show in the Available Plugins list.
-* Click the Install button next to the plugin name.
-
-
-
-## Plugin Settings
-
-Go to Status/Control > Weather Monitor (under Plugins) to modify the settings for this plugin.
-
-### Weather Station ID
-
-If you know the weather station ID that is closest to your show, can enter it. Entering "0000",
-will have the system automatically populate the station ID for you. Station ID is dependent upon the
-GPS coordinates of your show entered in the FPP Settings (Status/Control > FPP Settings > System tab).
-
-### Email Address
-
-The NWS API does not use API keys or tokens. Instead they use the User Agent and email address as the
-way to uniquely identify your requests. If a security event were to occur, you will be notified by the NWS
-at the email address that you provide.
-
-### Weather Text Descriptions
-
-If there are certain weather conditions that you want the show to be stopped for, such as rain, thunderstorms, etc, you may
-enter these in this field. Each condition should be separated by commas or semicolons.
-
-### Max Wind Speed
-
-Enter the wind speed, that if exceeded, the show will be stopped by the monitor.
-
-### Max Gust Speed
-
-Enter the wind gust speed, that if exceeded, the show will be stopped by the monitor.
-
-
-
-## Donate
+## Donations
 
 Enjoy using this plugin? Consider giving a donation to support the development efforts.
-
-
-
-## Feature Requests and Bug Reports
-
-To request a feature or report a bug, file an issue on the project repository at
-https://github.com/almostengr/fpp-weather-monitor-plugin/issues
-
-### Reporting Issues
-
-When reporting issues, please be sure to include the contents of the apache2-error.log and any other recently
-modified log files in your issue request. Omitting these files will cause delays in providing fixes.
-
-
-
-## References
-
-Parts of the code were referenced from various websites. Sources are cited below.
-
-* https://weichie.com/blog/curl-api-calls-with-php/

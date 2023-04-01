@@ -1,7 +1,7 @@
 <?php
 
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
 
 interface SettingServiceInterface
 {
@@ -34,13 +34,18 @@ final class SettingService extends BaseService implements SettingServiceInterfac
         switch ($key) {
             case EMAIL_ADDRESS_SETTING:
                 $isValid = filter_var($value, FILTER_VALIDATE_EMAIL);
-                if ($isValid === false) {
-                    return "Email address is invalid.";
+                if ($isValid === false || empty($value)) {
+                    return "Email Address is invalid.";
                 }
                 break;
 
             case NWS_WEATHER_STATION_ID:
-                if (!empty($value) && $value != "0000") {
+                if (empty($value))
+                {
+                    return "Weather Station ID is required.";
+                }
+
+                if ($value != "0000") {
                     break;
                 }
 
@@ -60,7 +65,7 @@ final class SettingService extends BaseService implements SettingServiceInterfac
             case MAX_GUST_SPEED:
                 $valueFloat = (float) $value;
                 if ($valueFloat < 1) {
-                    return "Gust speed cannot be less than or equal to zero (0)";
+                    return "Wind Gust Speed cannot be less than or equal to zero.";
                 }
 
                 if ($this->isTemperatureInF()) {
@@ -72,7 +77,7 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 $valueFloat = (float) $value;
 
                 if ($valueFloat < 1) {
-                    return "Wind speed cannot be less than or equal to zero (0)";
+                    return "Wind Speed cannot be less than or equal to zero.";
                 }
 
                 if ($this->isTemperatureInF()) {

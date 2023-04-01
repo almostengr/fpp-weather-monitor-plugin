@@ -19,9 +19,9 @@ $menuEntries = array(
 		'wrap' => 1
 	),
 	array(
-		'text' => 'Weather Monitor',
+		'text' => 'Weather Monitor User Guide',
 		'type' => 'help',
-		'page' => 'https://github.com/almostengr/fpp-weather-monitor-plugin/',
+		'page' => 'https://github.com/almostengr/fpp-weather-monitor-plugin/tree/main/user_guide',
 		'wrap' => 1
 	),
 );

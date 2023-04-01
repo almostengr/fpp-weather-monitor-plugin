@@ -1,6 +1,6 @@
 <?php
 
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/FppApiService.php');
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingService.php');
 
@@ -30,7 +30,6 @@ while (true) {
 
         try {
             $observation = $weatherService->getLatestObservations();
-            syslog(LOG_INFO, print_r($observation)); // todo log the reported conditions
         } catch (Exception $exception) {
             error_log($exception->getMessage());
             continue;
@@ -47,7 +46,8 @@ while (true) {
             str_contains(strtolower($textDescriptions), strtolower($observation->getDescription()))
         ) {
             $fppApiService->stopPlaylistGracefully();
-            syslog(LOG_INFO, "Stopping show due to weather"); // todo send notification when show is stopped
+            syslog(LOG_INFO, "Stopping show due to weather condition(s) being met. " . print_r($observation));
+            // todo send notification when show is stopped
         }
     } // end getting weather observation
 
