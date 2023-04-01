@@ -17,29 +17,29 @@ while (true) {
     if (($lastFppStatusCheckTime - $currentTime) >= FPP_STATUS_CHECK_TIME) {
         try {
             $status = $fppApiService->getShowStatus();
-        } catch (Exception) {
-            // todo log what happened
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
             continue;
         }
-        
+
         $lastFppStatusCheckTime = $currentTime;
     } // end getting FPP status
 
     if (($status->status_name == "playing" && $lastWeatherCheckTime - $currentTime) >= MONITOR_DELAY_TIME) {
+        $observation;
+
         try {
             $observation = $weatherService->getLatestObservations();
-        } catch (Exception) {
-            // todo log what occurred here
+            syslog(LOG_INFO, print_r($observation)); // todo log the reported conditions
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
             continue;
         }
 
+        $lastWeatherCheckTimeSeconds = $currentTime;
         $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
         $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
         $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
-
-        // todo log the reported conditions
-
-        $lastWeatherCheckTimeSeconds = $currentTime;
 
         if (
             $observation->getGustSpeed() >= $gustThreshold ||
@@ -47,8 +47,8 @@ while (true) {
             str_contains(strtolower($textDescriptions), strtolower($observation->getDescription()))
         ) {
             $fppApiService->stopPlaylistGracefully();
-            // todo send notification when show is stopped
+            syslog(LOG_INFO, "Stopping show due to weather"); // todo send notification when show is stopped
         }
-    } // end getting weather data
-
+    } // end getting weather observation
+    
 }

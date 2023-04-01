@@ -7,6 +7,7 @@
 * [Pre-Installation](#pre-installation)
 * [Installation](#installation)
 * [Plugin Settings](#plugin-settings)
+* [Donations](#donations)
 * [Feature Requests and Bug Reports](#feature-requests-and-bug-reports)
 * [References](#references)
 
@@ -85,6 +86,12 @@ Enter the wind speed, that if exceeded, the show will be stopped by the monitor.
 ### Max Gust Speed
 
 Enter the wind gust speed, that if exceeded, the show will be stopped by the monitor.
+
+
+
+## Donate
+
+Enjoy using this plugin? Consider giving a donation to support the development efforts.
 
 
 

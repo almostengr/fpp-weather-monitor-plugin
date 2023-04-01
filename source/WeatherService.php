@@ -10,7 +10,6 @@ interface WeatherServiceInterface
 interface NwsWeatherServiceInterface extends WeatherServiceInterface
 {
     public function getStationIdFromGpsCoordinates(): string;
-    public function getAlertZoneFromGpsCoordinates(): string;
 }
 
 final class NwsApiWeatherService extends BaseApiService implements NwsWeatherServiceInterface
@@ -33,12 +32,13 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         return $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
     }
 
-    public function getAlertZoneFromGpsCoordinates(): string
-    {
-        $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
-        $forecastZoneResponse = $this->callAPI(GET, $pointResponse->properties->forecastZone, array(), $this->getHeaders(), $this->userAgent());
-        return $forecastZoneResponse->properties->id;
-    }
+    // todo for future release
+    // public function getAlertZoneFromGpsCoordinates(): string
+    // {
+    //     $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
+    //     $forecastZoneResponse = $this->callAPI(GET, $pointResponse->properties->forecastZone, array(), $this->getHeaders(), $this->userAgent());
+    //     return $forecastZoneResponse->properties->id;
+    // }
 
     public function getStationIdFromGpsCoordinates(): string
     {
@@ -58,6 +58,14 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
             $response->properties->textDescription
         );
     }
+
+    // todo for future release
+    // public function getLatestAlerts()
+    // {
+    //     $route = "https://api.weather.gov/alerts/active/zone/" . ReadSettingFromFile(NWS_WEATHER_ALERT_ZONE, WM_PLUGIN_NAME);
+    //     $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
+    //     return $response;
+    // }
 }
 
 final class ObservationModel

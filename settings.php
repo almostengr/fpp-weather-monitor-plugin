@@ -24,6 +24,14 @@ if (!empty($_POST)) {
   }
   ?>
   <form method="post">
+    <h2>Donate</h2>
+    <div class="row">
+      <div class="col-md-4">Donate</div>
+      <div class="col-md">
+        Enjoy using this plugin? Please make a donation to support the future of this plugin.
+      </div>
+    </div>
+
     <h2>General</h2>
     <div class="row">
       <div class="col-md-4">NWS Weather Station ID</div>
@@ -32,8 +40,7 @@ if (!empty($_POST)) {
           value="<?php echo $settingService->getSetting(NWS_WEATHER_STATION_ID); ?>" required="required" />
         <div>
           If left blank, station ID will automatically be populated from the GPS coordinates entered at Status/Control >
-          FPP
-          Settings > System.
+          FPP Settings > System.
         </div>
       </div>
     </div>
