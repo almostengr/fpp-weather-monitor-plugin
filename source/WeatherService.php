@@ -72,7 +72,7 @@ final class ObservationModel
 {
     private $windSpeedKmh;
     private $gustSpeedKmh;
-    private string $description;
+    private $description;
 
     private function __construct(float $windSpeed, float $gustSpeed, string $description)
     {
