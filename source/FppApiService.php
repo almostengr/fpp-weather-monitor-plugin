@@ -1,6 +1,6 @@
 <?php
 
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/BaseApiService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseApiService.php');
 
 define("LOCALHOST_API", "http://127.0.0.1/api/");
 

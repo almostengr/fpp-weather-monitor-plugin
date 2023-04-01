@@ -1,6 +1,6 @@
 <?php
 
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/BaseApiService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseApiService.php');
 
 interface WeatherServiceInterface
 {

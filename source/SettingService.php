@@ -1,7 +1,7 @@
 <?php
 
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/BaseService.php');
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/WeatherService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherService.php');
 
 interface SettingServiceInterface
 {
