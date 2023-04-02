@@ -14,6 +14,7 @@ final class SettingService extends BaseService implements SettingServiceInterfac
     public function getSetting(string $key)
     {
         $value = ReadSettingFromFile($key, WM_PLUGIN_NAME);
+	$value = str_replace("_", " ", $value);
 
         switch ($key) {
             case MAX_GUST_SPEED:
@@ -31,6 +32,7 @@ final class SettingService extends BaseService implements SettingServiceInterfac
 
     public function createUpdateSetting(string $key, string $value)
     {
+	$value = trim($value);
         switch ($key) {
             case EMAIL_ADDRESS_SETTING:
                 $isValid = filter_var($value, FILTER_VALIDATE_EMAIL);
@@ -86,6 +88,7 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 break;
         }
 
+	$value = str_replace(" ", "_", $value);
         WriteSettingToFile($key, $value, WM_PLUGIN_NAME);
         return true;
     }

@@ -27,26 +27,30 @@ if (!empty($_POST)) {
   }
 
   if (!empty($_POST) && sizeof($errors) == $succeeded) {
-    echo "<div class='p-1 alert bg-success text-white font-weight-bold'>Settings saved successfully</div>";
+    echo "<div class='p-1 alert bg-success text-white font-weight-bold'>Configuration saved successfully.</div>";
   }
   ?>
 
-  <form method="post">
     <div class="row my-3">
       <div class="col-md-2 text-center">Donate</div>
       <div class="col-md">
-        Enjoy using this plugin? Please make a donation to support the future of this plugin.
+        Enjoy using this plugin? Please consider making a donation to support the future development of this plugin.
+	<div>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN" target="_blank">
+         <button class="buttons">Make Donation</button></a>
+	</div>
       </div>
     </div>
 
+  <form method="post">
     <div class="row my-3">
       <div class="col-md-2 text-center">NWS Weather Station ID</div>
       <div class="col-md">
         <input type="text" name="<?php echo NWS_WEATHER_STATION_ID; ?>"
           value="<?php echo $settingService->getSetting(NWS_WEATHER_STATION_ID); ?>" required="required" />
         <div class="text-muted">
-          Identifier for the weather station closest to your location.
-          Enter "0000" to automatically populate the closest weather station using the GPS coordinates entered
+          Enter the identifier for the weather station closest to your location.
+          Enter "0000" to automatically populate the closest weather station using the latitude and longitude entered
           on <a href="/settings.php#settings-system">Status/Control > FPP Settings > System tab</a>.
         </div>
       </div>
@@ -55,12 +59,10 @@ if (!empty($_POST)) {
     <div class="row my-3">
       <div class="col-md-2 text-center">Email Address</div>
       <div class="col-md">
-        <input type="text" name="<?php echo EMAIL_ADDRESS_SETTING; ?>"
+        <input type="email" name="<?php echo EMAIL_ADDRESS_SETTING; ?>"
           value="<?php echo $settingService->getSetting(EMAIL_ADDRESS_SETTING); ?>" required="required" />
         <div class="text-muted">
           Enter the email address that will be used to identify your API calls made to the National Weather Service API.
-          If there are issues or concerns with the APIs calls that are made or
-          if there is a security event, you will be notified by the NWS at the email address entered.
         </div>
       </div>
     </div>
@@ -72,11 +74,9 @@ if (!empty($_POST)) {
           value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" class="form-control" />
         <div class="text-muted">
           Enter the weather descriptions, that if current, the monitor will stop your show.
+ 	  Separate descriptions with a semi colon.
         </div>
-        <div class="text-muted">
-          List of descriptions include, but are not limited to, "showers", "rain", "thunderstorms",
-          "clear", "sunny", and "partly cloudy".
-        </div>
+      </div>
       </div>
 
       <div class="row my-3">

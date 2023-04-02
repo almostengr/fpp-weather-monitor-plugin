@@ -9,4 +9,6 @@
 
 ## Donations
 
-Enjoy using this plugin? Consider giving a donation to support the development efforts.
+Enjoy using this plugin? Consider giving a donation to support the development efforts at
+[https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN](https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN)
+

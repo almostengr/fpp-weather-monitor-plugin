@@ -30,3 +30,5 @@ Project documentation and user guide can be viewed in the [User Guide](./user_gu
 ## Donations
 
 Enjoy using this plugin? Consider giving a donation to support the development efforts.
+[https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN](https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN)
+
