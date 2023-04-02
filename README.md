@@ -20,6 +20,8 @@ The plugin will not make calls to the NWS API when the show is idle or paused.
 * The weather stations that are used by the NWS report their data approximately once per hour.
 For that reason, this plugin is designed to poll the NWS API twice per hour. This plugin cannot get real
 time data nor does it utilize forecasted weather conditions.
+* This project is designed to use data from the National Weather Service. This means that users outside of 
+the United States, will not be able to use this plugin.
 
 ## User Guide
 
