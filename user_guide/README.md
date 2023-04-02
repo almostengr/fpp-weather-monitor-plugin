@@ -5,7 +5,8 @@
 * [Installation](./installation.md)
 * [Plugin Settings](./settings.md)
 * [Feature Requests and Bug Reports](./report_issue.md)
-* [References](./references.md)
+* [Credits](./credits.md)
+* [Frequently Asked Questions](./faq.md)
 
 ## Donations
 
