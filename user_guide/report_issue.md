@@ -1,7 +1,7 @@
 # Feature Requests and Bug Reports
 
 To request a feature or report a bug, file an issue on the project repository at
-https://github.com/almostengr/fpp-weather-monitor-plugin/issues
+[https://github.com/almostengr/fpp-weather-monitor-plugin/issues](https://github.com/almostengr/fpp-weather-monitor-plugin/issues)
 
 ## Reporting Issues
 

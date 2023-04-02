@@ -1,6 +1,6 @@
 # Plugin Settings
 
-Go to Status/Control > Weather Monitor (under Plugins subheading) to modify the settings for this plugin.
+On your Falcon Pi Player, go to Status/Control > Weather Monitor to modify the settings for this plugin.
 
 ## NWS Weather Station ID
 

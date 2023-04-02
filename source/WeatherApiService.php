@@ -54,8 +54,8 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherSer
         $route = "https://api.weather.gov/stations/" . ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME) . "/observations/latest";
         $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
         return ObservationModel::CreateFromNwsApi(
-            $response->properties->windSpeed,
-            $response->properties->windGust,
+            (float) $response->properties->windSpeed->value,
+            (float) $response->properties->windGust->value,
             $response->properties->textDescription
         );
     }

@@ -10,6 +10,7 @@ $settingService = new SettingService();
 $lastWeatherCheckTime = 0;
 $lastFppStatusCheckTime = 0;
 $status = array();
+$observation = array();
 
 while (true) {
     $currentTime = time();
@@ -26,8 +27,6 @@ while (true) {
     } // end getting FPP status
 
     if ($status->status_name == "playing" && ($currentTime - $lastWeatherCheckTime) >= MONITOR_DELAY_TIME) {
-        $observation = null;
-
         try {
             $observation = $weatherService->getLatestObservations();
         } catch (Exception $exception) {
@@ -35,7 +34,7 @@ while (true) {
             continue;
         }
 
-        $lastWeatherCheckTimeSeconds = $currentTime;
+        $lastWeatherCheckTime = $currentTime;
         $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
         $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
         $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
@@ -43,10 +42,10 @@ while (true) {
         if (
             $observation->getGustSpeed() >= $gustThreshold ||
             $observation->getWindSpeed() >= $windThreshold ||
-            str_contains(strtolower($textDescriptions), strtolower($observation->getDescription()))
+            strpos(strtolower($textDescriptions), strtolower($observation->getDescription())) !== false
         ) {
             $fppApiService->stopPlaylistGracefully();
-            syslog(LOG_INFO, "Stopping show due to weather condition(s) being met. " . print_r($observation));
+            error_log("Stopping show due to weather condition(s) being met. " . print_r($observation));
             // todo send notification when show is stopped
         }
     } // end getting weather observation
