@@ -9,12 +9,12 @@ $fppApiService = new FppApiService();
 $settingService = new SettingService();
 $lastWeatherCheckTime = 0;
 $lastFppStatusCheckTime = 0;
+$lastAlertsCheckTime = 0;
 $status = array();
-$observation = array();
 
 while (true) {
     $currentTime = time();
-
+    
     if (($currentTime - $lastFppStatusCheckTime) >= FPP_STATUS_CHECK_TIME) {
         try {
             $status = $fppApiService->getShowStatus();
@@ -22,11 +22,12 @@ while (true) {
             error_log($exception->getMessage());
             continue;
         }
-
+        
         $lastFppStatusCheckTime = $currentTime;
     } // end getting FPP status
-
-    if ($status->status_name == "playing" && ($currentTime - $lastWeatherCheckTime) >= MONITOR_DELAY_TIME) {
+    
+    if ($status->status_name == PLAYING && ($currentTime - $lastWeatherCheckTime) >= MONITOR_DELAY_TIME) {
+        $observation = array();
         try {
             $observation = $weatherService->getLatestObservations();
         } catch (Exception $exception) {
@@ -50,4 +51,22 @@ while (true) {
         }
     } // end getting weather observation
 
+    if ($status->status_name == PLAYING && ($currentTime - $lastAlertsCheckTime) >= NWS_ALERT_INTERVAL_TIME)
+    {
+        $alerts = array();
+
+        try {
+            $alerts = $weatherService->getLatestAlerts();  // call alerts api
+        }
+        catch (Exception $exception)
+        {
+            error_log($exception->getMessage());
+            continue;
+        }
+
+        $lastAlertsCheckTime = $currentTime;
+        // compare existing alerts to configured alerts
+
+        // if matches are found, then gracefully stop the show
+    } // end getting weather alerts
 }

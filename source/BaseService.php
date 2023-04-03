@@ -4,6 +4,7 @@ require_once('/opt/fpp/www/common.php');
 
 define("GET", "GET");
 define("POST", "POST");
+define("PLAYING", "playing");
 define("EMPTY_STRING", "");
 define("EMAIL_ADDRESS_SETTING", "emailAddressSetting");
 define("NWS_WEATHER_STATION_ID", "nwsWeatherStationId");
@@ -14,6 +15,7 @@ define("MAX_GUST_SPEED", "maxGustSpeedKmH");
 define("WM_PLUGIN_NAME", "fpp_weather_monitor");
 define("MONITOR_DELAY_TIME", 900); // 15 minutes
 define("FPP_STATUS_CHECK_TIME", 15); // 15 seconds
+define("NWS_ALERT_INTERVAL_TIME", 300) // 5 minutes
 
 abstract class BaseService
 {
