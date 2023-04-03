@@ -47,3 +47,7 @@ semantic versioning, a determination has to be made whether the changes are majo
 possible that multiple minor changes being release, could fit the criteria for a major change. 
 To keep things simple, it was decided to have the version number be based on the date that the 
 release occurred. This is similar to how Ubuntu does version numbers.
+
+## Where can I learn more information about Falcon Pi Player?
+
+Visit the [FPP repository](https://github.com/falconchristmas/fpp). 
