@@ -1,4 +1,4 @@
-# FPP Weather Monitor
+# FPP Weather Monitor Plugin
 
 ## Purpose
 
