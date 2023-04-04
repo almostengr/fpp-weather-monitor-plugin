@@ -9,12 +9,22 @@ interface SettingServiceInterface
     public function createUpdateSetting(string $key, string $value);
 }
 
+// final class SettingService extends BaseService implements SettingServiceInterface
 final class SettingService extends BaseService implements SettingServiceInterface
 {
+    private $repository;
+    private $weatherService;
+
+    public function __construct(SettingRepostioryInterface $repository, NwsWeatherServiceInterface $weatherService)
+    {
+        $this->repository = $repository;
+        $this->weatherService = $weatherService;
+    }
+
+
     public function getSetting(string $key)
     {
-        $value = ReadSettingFromFile($key, WM_PLUGIN_NAME);
-        $value = str_replace("_", " ", $value);
+        $this->repository->getSEtting($key);
 
         switch ($key) {
             case MAX_GUST_SPEED:
@@ -45,22 +55,6 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 if (empty($value)) {
                     return "Weather Station ID is required.";
                 }
-
-                if ($value != "0000") {
-                    break;
-                }
-
-                $nwsApi = new NwsApiWeatherService();
-                $value = $nwsApi->getStationIdFromGpsCoordinates();
-                break;
-
-            case NWS_WEATHER_ALERT_ZONE:
-                if (!empty($value)) {
-                    return;
-                }
-
-                $nwsApi = new NwsApiWeatherService();
-                $value = $nwsApi->getAlertZoneFromGpsCoordinates();
                 break;
 
             case MAX_GUST_SPEED:
@@ -87,8 +81,29 @@ final class SettingService extends BaseService implements SettingServiceInterfac
                 break;
         }
 
+        $this->repository->createUpdateSetting($key, $value);
+        return true;
+    }
+}
+
+
+interface SettingRepostioryInterface
+{
+    public function getSetting(string $key) : string;
+    public function createUpdateSetting(string $key, string $value) : void;
+}
+
+final class SettingRepository implements SettingRepostioryInterface
+{
+    public function getSetting(string $value) : string
+    {
+        $value = ReadSettingFromFile($key, WM_PLUGIN_NAME);
+        return str_replace("_", " ", $value);
+    }
+
+    public function createUpdateSetting(string $key, string $value) : void
+    {
         $value = str_replace(" ", "_", $value);
         WriteSettingToFile($key, $value, WM_PLUGIN_NAME);
-        return true;
     }
 }

@@ -16,6 +16,8 @@ $status = array();
 
 while (true) {
     $currentTime = time();
+
+    // todo if station id value is "0000", then need to get station id and alert zone from api
     
     if (($currentTime - $lastFppStatusCheckTime) >= FPP_STATUS_CHECK_TIME) {
         $status = $monitorService->getFppStatus();        
