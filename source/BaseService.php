@@ -13,9 +13,9 @@ define("WEATHER_DESCRIPTIONS", "weatherDescriptions");
 define("MAX_WIND_SPEED", "maxWindSpeedKmH");
 define("MAX_GUST_SPEED", "maxGustSpeedKmH");
 define("WM_PLUGIN_NAME", "fpp_weather_monitor");
-define("MONITOR_DELAY_TIME", 900); // 15 minutes
+define("OBSERVATION_CHECK_INTERVAL_TIME", 900); // 15 minutes
 define("FPP_STATUS_CHECK_TIME", 15); // 15 seconds
-define("NWS_ALERT_INTERVAL_TIME", 300) // 5 minutes
+define("NWS_ALERT_INTERVAL_TIME", 300); // 5 minutes
 
 abstract class BaseService
 {
