@@ -8,7 +8,13 @@ require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/MonitorS
 // $weatherService = new NwsApiWeatherService();
 // $fppApiService = new FppApiService();
 // $settingService = new SettingService();
-$monitorService = new MonitorService();
+$settingRepository = new $settingRepository();
+$settingService = new SettingService($settingRepository);
+$fppApiService = new FppApiService();
+$weatherApiService = new NwsApiWeatherService($settingService);
+// $monitorService = new MonitorService();
+$monitorService = new MonitorService($settingService, $fppApiService, $weatherApiService);
+
 $lastWeatherCheckTime = 0;
 $lastFppStatusCheckTime = 0;
 $lastAlertsCheckTime = 0;
@@ -17,21 +23,20 @@ $status = array();
 while (true) {
     $currentTime = time();
 
-    // todo if station id value is "0000", then need to get station id and alert zone from api
-    
     if (($currentTime - $lastFppStatusCheckTime) >= FPP_STATUS_CHECK_TIME) {
-        $status = $monitorService->getFppStatus();        
+        $monitorService->updateStationIdSettings();
+
+        $status = $monitorService->getFppStatus();
         $lastFppStatusCheckTime = $currentTime;
     } // end getting FPP status
-    
+
     if ($status->status_name == PLAYING && ($currentTime - $lastWeatherCheckTime) >= OBSERVATION_CHECK_INTERVAL_TIME) {
-        $monitorService->getAndCompareWeatherObservation();
+        $monitorService->getWeatherObservations();
         $lastWeatherCheckTime = $currentTime;
     } // end getting weather observation
 
-    if ($status->status_name == PLAYING && ($currentTime - $lastAlertsCheckTime) >= NWS_ALERT_INTERVAL_TIME)
-    {
-        $monitorService->getAndCompareAlerts();
+    if ($status->status_name == PLAYING && ($currentTime - $lastAlertsCheckTime) >= NWS_ALERT_INTERVAL_TIME) {
+        $monitorService->getWeatherAlerts();
         $lastAlertsCheckTime = $currentTime;
     } // end getting weather alerts
 }

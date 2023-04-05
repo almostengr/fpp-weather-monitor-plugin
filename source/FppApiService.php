@@ -4,7 +4,13 @@ require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseApiS
 
 define("LOCALHOST_API", "http://127.0.0.1/api/");
 
-final class FppApiService extends BaseApiService
+interface FppApiServiceInterface
+{
+    public function getShowStatus();
+    public function stopPlaylistGracefully();
+}
+
+final class FppApiService extends BaseApiService implements FppApiServiceInterface
 {
     public function getShowStatus()
     {

@@ -51,3 +51,6 @@ release occurred. This is similar to how Ubuntu does version numbers.
 ## Where can I learn more information about Falcon Pi Player?
 
 Visit the [FPP repository](https://github.com/falconchristmas/fpp). 
+
+
+todo /api/plugin/:RepoName/settings/:SettingName

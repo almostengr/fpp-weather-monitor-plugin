@@ -1,7 +1,7 @@
 <?php
 
-// require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
+// require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
 
 interface SettingServiceInterface
 {
@@ -13,18 +13,15 @@ interface SettingServiceInterface
 final class SettingService extends BaseService implements SettingServiceInterface
 {
     private $repository;
-    private $weatherService;
 
-    public function __construct(SettingRepostioryInterface $repository, NwsWeatherServiceInterface $weatherService)
+    public function __construct(SettingRepostioryInterface $repository)
     {
         $this->repository = $repository;
-        $this->weatherService = $weatherService;
     }
-
 
     public function getSetting(string $key)
     {
-        $this->repository->getSEtting($key);
+        $value = $this->repository->getSetting($key);
 
         switch ($key) {
             case MAX_GUST_SPEED:
@@ -89,19 +86,19 @@ final class SettingService extends BaseService implements SettingServiceInterfac
 
 interface SettingRepostioryInterface
 {
-    public function getSetting(string $key) : string;
-    public function createUpdateSetting(string $key, string $value) : void;
+    public function getSetting(string $key): string;
+    public function createUpdateSetting(string $key, string $value): void;
 }
 
 final class SettingRepository implements SettingRepostioryInterface
 {
-    public function getSetting(string $value) : string
+    public function getSetting(string $key): string
     {
         $value = ReadSettingFromFile($key, WM_PLUGIN_NAME);
         return str_replace("_", " ", $value);
     }
 
-    public function createUpdateSetting(string $key, string $value) : void
+    public function createUpdateSetting(string $key, string $value): void
     {
         $value = str_replace(" ", "_", $value);
         WriteSettingToFile($key, $value, WM_PLUGIN_NAME);

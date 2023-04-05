@@ -1,7 +1,10 @@
 <?php
 require_once '/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingService.php';
 
-$settingService = new SettingService();
+// $settingService = new SettingService();
+$settingRepository = new SettingRepository();
+$settingService = new SettingService($settingRepository);
+
 $errors = array();
 
 if (!empty($_POST)) {
@@ -31,16 +34,16 @@ if (!empty($_POST)) {
   }
   ?>
 
-    <div class="row my-3">
-      <div class="col-md-2 text-center">Donate</div>
-      <div class="col-md">
-        Enjoy using this plugin? Please consider making a donation to support the future development of this plugin.
-	<div>
+  <div class="row my-3">
+    <div class="col-md-2 text-center">Donate</div>
+    <div class="col-md">
+      Enjoy using this plugin? Please consider making a donation to support the future development of this plugin.
+      <div>
         <a href="https://www.paypal.com/donate/?hosted_button_id=GXFQ3GT6DRZFN" target="_blank">
-         <button class="buttons">Make Donation</button></a>
-	</div>
+          <button class="buttons">Make Donation</button></a>
       </div>
     </div>
+  </div>
 
   <form method="post">
     <div class="row my-3">
@@ -52,6 +55,19 @@ if (!empty($_POST)) {
           Enter the identifier for the weather station closest to your location.
           Enter "0000" to automatically populate the closest weather station using the latitude and longitude entered
           on <a href="/settings.php#settings-system">Status/Control > FPP Settings > System tab</a>.
+          Auto-populate station ID is done in the background and will not immediately update this screen.
+        </div>
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <div class="col-md-2 text-center">NWS Weather Alert Zone</div>
+      <div class="col-md">
+        <input type="text" disabled="disabled" name="<?php echo NWS_WEATHER_ALERT_ZONE; ?>"
+          value="<?php echo $settingService->getSetting(NWS_WEATHER_ALERT_ZONE); ?>" />
+        <div class="text-muted">
+          This field is automatically populated based on the Weather Station ID and is displayed for
+          informational purposes.
         </div>
       </div>
     </div>
@@ -74,40 +90,46 @@ if (!empty($_POST)) {
           value="<?php echo $settingService->getSetting(WEATHER_DESCRIPTIONS); ?>" class="form-control" />
         <div class="text-muted">
           Enter the weather descriptions, that if current, the monitor will stop your show.
- 	  Separate descriptions with a semi colon.
+          Separate descriptions with a semi colon.
         </div>
       </div>
-      </div>
+    </div>
 
-      <div class="row my-3">
-        <div class="col-md-2 text-center">
-          Max Wind Speed
-          <?php echo $settingService->getSpeedUnitText(); ?>
-        </div>
-        <div class="col-md">
-          <input type="number" name="<?php echo MAX_WIND_SPEED; ?>"
-            value="<?php echo $settingService->getSetting(MAX_WIND_SPEED); ?>" required="required" />
-          <div class="text-muted">
-            Enter the maximum wind speed that, if exceeded, the monitor will stop your show.
-          </div>
+    <h2>Wind</h2>
+
+    <div class="row my-3">
+      <div class="col-md-2 text-center">
+        Max Wind Speed
+        <?php echo $settingService->getSpeedUnitText(); ?>
+      </div>
+      <div class="col-md">
+        <input type="number" name="<?php echo MAX_WIND_SPEED; ?>"
+          value="<?php echo $settingService->getSetting(MAX_WIND_SPEED); ?>" required="required" />
+        <div class="text-muted">
+          Enter the maximum wind speed that, if exceeded, the monitor will stop your show.
         </div>
       </div>
+    </div>
 
-      <div class="row my-3">
-        <div class="col-md-2 text-center">
-          Max Wind Gust Speed
-          <?php echo $settingService->getSpeedUnitText(); ?>
-        </div>
-        <div class="col-md">
-          <input type="number" name="<?php echo MAX_GUST_SPEED; ?>"
-            value="<?php echo $settingService->getSetting(MAX_GUST_SPEED); ?>" required="required" />
-          <div class="text-muted">
-            Enter the maximum wind gust speed that, if exceeded, the monitor will stop your show.
-          </div>
+    <div class="row my-3">
+      <div class="col-md-2 text-center">
+        Max Wind Gust Speed
+        <?php echo $settingService->getSpeedUnitText(); ?>
+      </div>
+      <div class="col-md">
+        <input type="number" name="<?php echo MAX_GUST_SPEED; ?>"
+          value="<?php echo $settingService->getSetting(MAX_GUST_SPEED); ?>" required="required" />
+        <div class="text-muted">
+          Enter the maximum wind gust speed that, if exceeded, the monitor will stop your show.
         </div>
       </div>
+    </div>
 
-      <button class="buttons my-3" type="submit">Save Settings</button>
+    <h2>Watches and Warning Alerts</h2>
+
+    <!-- form input for the watches and warnings that should stop the show -->
+    
+    <button class="buttons my-3" type="submit">Save Settings</button>
   </form>
 </body>
 
