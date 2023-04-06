@@ -13,6 +13,7 @@ if (!empty($_POST)) {
   array_push($errors, $settingService->createUpdateSetting(WEATHER_DESCRIPTIONS, $_POST[WEATHER_DESCRIPTIONS]));
   array_push($errors, $settingService->createUpdateSetting(MAX_WIND_SPEED, $_POST[MAX_WIND_SPEED]));
   array_push($errors, $settingService->createUpdateSetting(MAX_GUST_SPEED, $_POST[MAX_GUST_SPEED]));
+  array_push($errors, $settingService->createUpdateSetting(NWS_ALERT_TYPES, $_POST[NWS_ALERT_TYPES]));
 }
 ?>
 
@@ -95,7 +96,7 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-    <h2>Wind</h2>
+    <h2>Wind Speed</h2>
 
     <div class="row my-3">
       <div class="col-md-2 text-center">
@@ -127,8 +128,31 @@ if (!empty($_POST)) {
 
     <h2>Watches and Warning Alerts</h2>
 
-    <!-- form input for the watches and warnings that should stop the show -->
-    
+    <div class="row my-3">
+      <div class="col-md-2 text-center">
+        Watches and Warnings
+      </div>
+      <div class="col-md">
+        <?php
+        foreach ($settingService->getAlertTypes() as $alertType) {
+          $checked = "";
+          if (strpos($settingService->getSetting(NWS_ALERT_TYPES), $alertType) !== false) {
+            $checked = "checked='checked'";
+          }
+          ?>
+          <div>
+            <input type="checkbox" name="<?php echo NWS_ALERT_TYPES; ?>[]" value="<?php echo $alertType; ?>" <?php echo $checked; ?> />
+          </div>
+          <?php
+        }
+        ?>
+        <div class="text-muted">
+          Select each of the Watches and warnings that, if active, the monitor will stop your show.
+        </div>
+      </div>
+    </div>
+
+
     <button class="buttons my-3" type="submit">Save Settings</button>
   </form>
 </body>

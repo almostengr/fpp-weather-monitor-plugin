@@ -7,6 +7,7 @@ interface SettingServiceInterface
 {
     public function getSetting(string $key);
     public function createUpdateSetting(string $key, string $value);
+    public function getAlertTypes(): array;
 }
 
 // final class SettingService extends BaseService implements SettingServiceInterface
@@ -17,6 +18,48 @@ final class SettingService extends BaseService implements SettingServiceInterfac
     public function __construct(SettingRepostioryInterface $repository)
     {
         $this->repository = $repository;
+    }
+
+    public function getAlertTypes(): array
+    {
+        return array(
+            "Blizzard Warning",
+            "Coastal Flood Advisory",
+            "Coastal Flood Warning",
+            "Coastal Flood Watch",
+            "Dense Fog Advisory",
+            "Excessive Heat Warning",
+            "Excessive Heat Watch",
+            "Extreme Wind Warning",
+            "Fire Weather Watch",
+            "Flash Flood Warning",
+            "Flash Flood Watch",
+            "Flood Warning",
+            "Flood Watch",
+            "Freeze Warning",
+            "Freeze Watch",
+            "Frost Advisory",
+            "Heat Advisory",
+            "High Wind Warning",
+            "High Wind Watch",
+            "Hurricane Warning",
+            "Hurricane Watch",
+            "Ice Storm Warning",
+            "Red Flag Warning",
+            "River Flood Warning",
+            "River Flood Watch",
+            "Severe Thunderstorm Warning",
+            "Severe Thunderstorm Watch",
+            "Tornado Warning",
+            "Tornado Watch",
+            "Tropical Storm Warning",
+            "Tropical Storm Watch",
+            "Wind Advisory",
+            "Wind Chill Advisory",
+            "Wind Chill Warning",
+            "Winter Storm Warning",
+            "Winter Weather Advisory",
+        );
     }
 
     public function getSetting(string $key)

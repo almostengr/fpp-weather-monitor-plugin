@@ -54,3 +54,8 @@ are dependent upon the Temperature display setting under Status/Control > FPP Se
 Enter the wind gust speed, that if exceeded, the show will be stopped by the monitor. The units for this field,
 are dependent upon the Temperature display setting under Status/Control > FPP Settings > UI tab.
 
+## Watches and Warnings
+
+Select the watches and warnings that, if active, the show will be stopped by the monitor. 
+See the <a href="https://www.weather.gov/lwx/WarningsDefined" target='_blank'>NWS Website</a> for
+descriptions of each alert type.
