@@ -1,7 +1,7 @@
 <?php
+
 require_once '/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingService.php';
 
-// $settingService = new SettingService();
 $settingRepository = new SettingRepository();
 $settingService = new SettingService($settingRepository);
 
@@ -136,7 +136,8 @@ if (!empty($_POST)) {
         <?php
         foreach ($settingService->getAlertTypes() as $alertType) {
           $checked = "";
-          if (strpos($settingService->getSetting(NWS_ALERT_TYPES), $alertType) !== false) {
+          $selectedAlertTypes = $settingService->getSetting(NWS_ALERT_TYPES);
+          if (strpos($selectedAlertTypes, $alertType) !== false) {
             $checked = "checked='checked'";
           }
           ?>
@@ -147,7 +148,7 @@ if (!empty($_POST)) {
         }
         ?>
         <div class="text-muted">
-          Select each of the Watches and warnings that, if active, the monitor will stop your show.
+          Select each of the Watches and Warnings that, if active, the monitor will stop your show.
         </div>
       </div>
     </div>

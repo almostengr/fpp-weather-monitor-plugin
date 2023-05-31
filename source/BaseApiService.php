@@ -42,9 +42,10 @@ abstract class BaseApiService extends BaseService
         }
 
         $response = curl_exec($curl);
-        if (!$response) {
+        if ($response === false) {
             die("Connection Failure");
         }
+        
         $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         curl_close($curl);
 

@@ -1,7 +1,6 @@
 <?php
 
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
-// require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
 
 interface SettingServiceInterface
 {
@@ -10,12 +9,11 @@ interface SettingServiceInterface
     public function getAlertTypes(): array;
 }
 
-// final class SettingService extends BaseService implements SettingServiceInterface
 final class SettingService extends BaseService implements SettingServiceInterface
 {
     private $repository;
 
-    public function __construct(SettingRepostioryInterface $repository)
+    public function __construct(SettingRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -127,13 +125,13 @@ final class SettingService extends BaseService implements SettingServiceInterfac
 }
 
 
-interface SettingRepostioryInterface
+interface SettingRepositoryInterface
 {
     public function getSetting(string $key): string;
     public function createUpdateSetting(string $key, string $value): void;
 }
 
-final class SettingRepository implements SettingRepostioryInterface
+final class SettingRepository implements SettingRepositoryInterface
 {
     public function getSetting(string $key): string
     {

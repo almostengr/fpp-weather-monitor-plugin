@@ -2,6 +2,8 @@
 
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseApiService.php');
 
+define("NWS_API", "https://api.weather.gov/");
+
 interface WeatherApiServiceInterface
 {
     public function getLatestObservations(): ObservationModel;
@@ -9,10 +11,10 @@ interface WeatherApiServiceInterface
 
 interface NwsWeatherApiServiceInterface extends WeatherApiServiceInterface
 {
-    // public function getStationIdFromGpsCoordinates(): string;
     public function getPointsDetailsFromGpsCoordinates();
     public function getStationIdFromPointsResponse($pointsResponse): string;
     public function getAlertZoneIdFromPointsResponse($pointsResponse): string;
+    public function getForecast(): ObservationModel;
 }
 
 final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApiServiceInterface
@@ -26,7 +28,6 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApi
 
     private function userAgent(): string
     {
-        // return "User-Agent: (FalconPiPlayer, " . ReadSettingFromFile(EMAIL_ADDRESS_SETTING, WM_PLUGIN_NAME) . ")";
         return "User-Agent: (FalconPiPlayer, " . $this->settingService->getSetting(EMAIL_ADDRESS_SETTING) . ")";
     }
 
@@ -34,22 +35,19 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApi
     {
         $latitude = ReadSettingFromFile("Latitude");
         $longitude = ReadSettingFromFile("Longitude");
-        
+
         if (empty($latitude) || empty($longitude) || $latitude === false || $longitude === false) {
             $errorMsg = "Longitude and latitude need to be set. Go to Content Setup > FPP Settings > System to set your location.";
             error_log($errorMsg);
             return $errorMsg;
         }
-        
+
         $latitude = bcdiv($latitude, 1, 4);
         $longitude = bcdiv($longitude, 1, 4);
 
-        $pointsRoute = "https://api.weather.gov/points/" . $latitude . "," . $longitude;
+        $pointsRoute = NWS_API . "points/" . $latitude . "," . $longitude;
         return $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
-        // $result = $this->callAPI(GET, $pointsRoute, array(), $this->getHeaders(), $this->userAgent());
-        // return $result;
     }
-
 
     public function getStationIdFromPointsResponse($pointsResponse): string
     {
@@ -64,25 +62,9 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApi
         return $forecastZoneResponse->properties->id;
     }
 
-    // public function getAlertZoneFromGpsCoordinates(): string
-    // {
-    //     $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
-    //     $forecastZoneResponse = $this->callAPI(GET, $pointResponse->properties->forecastZone, array(), $this->getHeaders(), $this->userAgent());
-    //     return $forecastZoneResponse->properties->id;
-    // }
-
-    // public function getStationIdFromGpsCoordinates(): string
-    // {
-    //     $pointResponse = $this->getPointsDetailsFromGpsCoordinates();
-    //     $stationsResponse =
-    //         $this->callAPI(GET, $pointResponse->properties->observationStations, array(), $this->getHeaders(), $this->userAgent(), true);
-    //     return $stationsResponse['features']['0']['properties']['stationIdentifier'];
-    // }
-
     public function getLatestObservations(): ObservationModel
     {
-        // $route = "https://api.weather.gov/stations/" . ReadSettingFromFile(NWS_WEATHER_STATION_ID, WM_PLUGIN_NAME) . "/observations/latest";
-        $route = "https://api.weather.gov/stations/" . $this->settingService->getSetting(NWS_WEATHER_STATION_ID) . "/observations/latest";
+        $route = NWS_API . "stations/" . $this->settingService->getSetting(NWS_WEATHER_STATION_ID) . "/observations/latest";
         $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
         return ObservationModel::CreateFromNwsApi(
             (float) $response->properties->windSpeed->value,
@@ -93,11 +75,29 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApi
 
     public function getLatestAlerts()
     {
-        // $route = "https://api.weather.gov/alerts/active/zone/" . ReadSettingFromFile(NWS_WEATHER_ALERT_ZONE, WM_PLUGIN_NAME);
-        $route = "https://api.weather.gov/alerts/active/zone/" . $this->settingService->getSetting(NWS_WEATHER_ALERT_ZONE);
+        $route = NWS_API . "alerts/active/zone/" . $this->settingService->getSetting(NWS_WEATHER_ALERT_ZONE);
         return $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
-        // $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
-        // return $response;
+    }
+
+    public function getForecast(): ObservationModel
+    {
+        $route = NWS_API . "/zones/forecast/" . $this->settingService->getSetting(NWS_WEATHER_ALERT_ZONE) . "/observations";
+        $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
+
+        foreach ($response->features as $feature) {
+            $stationIdFound = strpos($feature->id, $this->settingService->getSetting(NWS_WEATHER_STATION_ID));
+            if ($stationIdFound === false) {
+                continue;
+            }
+
+            return ObservationModel::CreateFromNwsApi(
+                $feature->properties->windSpeed->value,
+                $feature->properties->windGust->value,
+                $feature->properties->textDescription
+            );
+        }
+
+        throw new Exception("Unable to get weather station information");
     }
 }
 
@@ -134,3 +134,4 @@ final class ObservationModel
         return $this->description;
     }
 }
+

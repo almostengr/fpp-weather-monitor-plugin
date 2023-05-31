@@ -49,7 +49,7 @@ Below are the most common text descriptions that can be used with this setting.
 Enter the wind speed, that if exceeded, the show will be stopped by the monitor. The units for this field,
 are dependent upon the Temperature display setting under Status/Control > FPP Settings > UI tab.
 
-## Max Gust Speed (MPH/KMH)
+## Max Wind Gust Speed (MPH/KMH)
 
 Enter the wind gust speed, that if exceeded, the show will be stopped by the monitor. The units for this field,
 are dependent upon the Temperature display setting under Status/Control > FPP Settings > UI tab.

@@ -17,6 +17,7 @@ define("OBSERVATION_CHECK_INTERVAL_TIME", 900); // 15 minutes
 define("FPP_STATUS_CHECK_TIME", 15); // 15 seconds
 define("NWS_ALERT_INTERVAL_TIME", 300); // 5 minutes
 define("NWS_ALERT_TYPES", "nwsAlertTypes");
+define("STOP_GRACEFULLY", "stopGracefully");
 
 abstract class BaseService
 {
