@@ -12,11 +12,9 @@ interface FppApiServiceInterface
 
 final class FppApiService extends BaseApiService implements FppApiServiceInterface
 {
-    private $settingService;
 
-    public function __construct(SettingServiceInterface $settingServiceInterface)
+    public function __construct()
     {
-        $this->settingService = $settingServiceInterface;
     }
 
     public function getShowStatus()

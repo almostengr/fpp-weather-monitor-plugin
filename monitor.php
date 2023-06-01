@@ -2,78 +2,87 @@
 
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/FppApiService.php');
 require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingService.php');
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/WeatherApiService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/NwsWeatherApiService.php');
 
-
-$settingRepository = new $settingRepository();
-$settingService = new SettingService($settingRepository);
-$fppApiService = new FppApiService($settingService);
-$weatherApiService = new NwsApiWeatherService($settingService);
-
-$lastWeatherCheckTime = 0;
-$lastFppStatusCheckTime = 0;
-$lastAlertsCheckTime = 0;
-$lastForecastCheckTime = 0;
-$status = array();
-
-
-function updateStationIdSettings()
+final class WeatherMonitorWorker
 {
-    global $currentTime;
-    global $lastFppStatusCheckTime;
-    global $settingService;
-    global $weatherApiService;
-    global $status;
-    global $fppApiService;
+    private $settingRepository;
+    private $settingService;
+    private $fppApiService;
+    private $nwsWeatherService;
 
-    if (($currentTime - $lastFppStatusCheckTime) < FPP_STATUS_CHECK_TIME) {
-        return;
+    private $lastWeatherCheckTime = 0;
+    private $lastFppStatusCheckTime = 0;
+    private $lastAlertsCheckTime = 0;
+    private $lastForecastCheckTime = 0;
+    private $status = array();
+    private $currentTime;
+
+    private $gustThreshold;
+    private $windThreshold;
+    private $textDescriptions;
+
+
+    public function __construct()
+    {
+        $this->settingRepository = new SettingRepository();
+        $this->settingService = new SettingService($this->settingRepository);
+        $this->fppApiService = new FppApiService();
+        $this->nwsWeatherService = new NwsApiWeatherService($this->settingService);
     }
 
-    try {
-        $stationId = $settingService->getSetting(NWS_WEATHER_STATION_ID);
+    public function updateCurrentTime()
+    {
+        $this->currentTime = time();
+    }
 
-        if ($stationId == "0000") {
-            $pointsResponse = $weatherApiService->getPointsDetailsFromGpsCoordinates();
-
-            $nwsStationId = $weatherApiService->getStationIdFromPointsResponse($pointsResponse);
-            $settingService->createUpdateSetting(NWS_WEATHER_STATION_ID, $nwsStationId);
-
-            $alertZone = $weatherApiService->getAlertZoneIdFromPointsResponse($pointsResponse);
-            $settingService->createUpdateSetting(NWS_WEATHER_ALERT_ZONE, $alertZone);
+    public function updateStationIdSettings(): void
+    {
+        if (($this->currentTime - $this->lastFppStatusCheckTime) < FPP_STATUS_CHECK_TIME) {
+            return;
         }
 
-        $status = $fppApiService->getShowStatus();
-        $lastFppStatusCheckTime = $currentTime;
-    } catch (Exception $exception) {
-        error_log($exception->getMessage());
-        return;
-    }
-}
-
-
-function getWeatherObservations()
-{
-    global $currentTime;
-    global $lastWeatherCheckTime;
-    global $settingService;
-    global $weatherApiService;
-    global $fppApiService;
-    global $status;
-
-    if ($status->status_name == PLAYING && ($currentTime - $lastWeatherCheckTime) >= OBSERVATION_CHECK_INTERVAL_TIME) {
         try {
-            $observation = $weatherApiService->getLatestObservations();
-            $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
-            $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
-            $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
+            $stationId = $this->settingService->getSetting(NWS_WEATHER_STATION_ID);
+
+            if ($stationId == "0000") {
+                $pointsResponse = $this->nwsWeatherService->getPointsDetailsFromGpsCoordinates();
+
+                $nwsStationId = $this->nwsWeatherService->getStationIdFromPointsResponse($pointsResponse);
+                $this->settingService->createUpdateSetting(NWS_WEATHER_STATION_ID, $nwsStationId);
+
+                $alertZone = $this->nwsWeatherService->getAlertZoneIdFromPointsResponse($pointsResponse);
+                $this->settingService->createUpdateSetting(NWS_WEATHER_ALERT_ZONE, $alertZone);
+
+                $this->gustThreshold = $this->settingService->getSetting(MAX_GUST_SPEED);
+                $this->windThreshold = $this->settingService->getSetting(MAX_WIND_SPEED);
+                $this->textDescriptions = $this->settingService->getSetting(WEATHER_DESCRIPTIONS);
+            }
+
+            $this->status = $this->fppApiService->getShowStatus();
+            $this->lastFppStatusCheckTime = $this->currentTime;
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
+            return;
+        }
+    }
+
+
+    public function getWeatherObservations(): void
+    {
+        if ($this->status->status_name !== PLAYING && ($this->currentTime - $this->lastWeatherCheckTime) < OBSERVATION_CHECK_INTERVAL_TIME) {
+            return;
+        }
+
+        try {
+            $observation = $this->nwsWeatherService->getLatestObservations();
 
             if (
-                $observation->getGustSpeed() >= $gustThreshold ||
-                $observation->getWindSpeed() >= $windThreshold ||
-                strpos(strtolower($textDescriptions), strtolower($observation->getDescription())) !== false
+                $observation->getGustSpeed() >= $this->gustThreshold ||
+                $observation->getWindSpeed() >= $this->windThreshold ||
+                strpos(strtolower($this->textDescriptions), strtolower($observation->getDescription())) !== false
             ) {
-                $fppApiService->runWeatherDelay();
+                $this->fppApiService->runWeatherDelay();
                 error_log("Stopping show due to weather condition(s) being met. " . print_r($observation));
             }
         } catch (Exception $exception) {
@@ -81,81 +90,64 @@ function getWeatherObservations()
             return;
         }
 
-        $lastWeatherCheckTime = $currentTime;
+        $this->lastWeatherCheckTime = $this->currentTime;
     }
-}
 
 
-function getForecastObservation()
-{
-    global $currentTime;
-    global $lastForecastCheckTime;
-    global $settingService;
-    global $weatherApiService;
-    global $fppApiService;
-    global $status;
-
-    if ($status->status_name == PLAYING && ($currentTime - $lastForecastCheckTime) >= OBSERVATION_CHECK_INTERVAL_TIME) {
-
-        $gustThreshold = $settingService->getSetting(MAX_GUST_SPEED);
-        $windThreshold = $settingService->getSetting(MAX_WIND_SPEED);
-        $textDescriptions = $settingService->getSetting(WEATHER_DESCRIPTIONS);
+    public function getForecastObservation(): void
+    {
+        if ($this->status->status_name !== PLAYING && ($this->currentTime - $this->lastForecastCheckTime) < OBSERVATION_CHECK_INTERVAL_TIME) {
+            return;
+        }
 
         try {
-            $forecast = $weatherApiService->getForecast();
+            $forecast = $this->nwsWeatherService->getForecast();
 
             if (
-                $forecast->getGustSpeed() >= $gustThreshold ||
-                $forecast->getWindSpeed() >= $windThreshold ||
-                strpos(strtolower($textDescriptions), strtolower($forecast->getDescription())) !== false
+                $forecast->getGustSpeed() >= $this->gustThreshold ||
+                $forecast->getWindSpeed() >= $this->windThreshold ||
+                strpos(strtolower($this->textDescriptions), strtolower($forecast->getDescription())) !== false
             ) {
-                $fppApiService->runWeatherDelay();
+                $this->fppApiService->runWeatherDelay();
                 error_log("Stopping show due to weather forecast conditions being met. " . print_r($forecast));
             }
         } catch (Exception $exception) {
             error_log($exception->getMessage());
             return;
         }
-        $lastForecastCheckTime = $currentTime;
-    }
-}
 
-
-function getWeatherAlerts()
-{
-    global $currentTime;
-    global $lastAlertsCheckTime;
-    global $settingService;
-    global $weatherApiService;
-    global $fppApiService;
-    global $status;
-
-    if ($status->status_name != PLAYING || ($currentTime - $lastAlertsCheckTime) < NWS_ALERT_INTERVAL_TIME) {
-        return;
+        $this->lastForecastCheckTime = $this->currentTime;
     }
 
-    try {
-        $alerts = $weatherApiService->getLatestAlerts();
 
-        $configuredAlerts = $settingService->getSetting(NWS_ALERT_TYPES);
-        if (strpos(strtolower($configuredAlerts), strtolower($alerts)) !== false) {
-            $fppApiService->runWeatherDelay();
-            error_log("Stopping show due to alert condition(s) being met. " . print_r($alerts));
+    public function getWeatherAlerts(): void
+    {
+        if ($this->status->status_name != PLAYING || ($this->currentTime - $this->lastAlertsCheckTime) < NWS_ALERT_INTERVAL_TIME) {
+            return;
         }
-    } catch (Exception $exception) {
-        error_log($exception->getMessage());
-        return;
-    }
 
-    $lastAlertsCheckTime = $currentTime;
+        try {
+            $alerts = $this->nwsWeatherService->getLatestAlerts();
+
+            $configuredAlerts = $this->settingService->getSetting(NWS_ALERT_TYPES);
+            if (strpos(strtolower($configuredAlerts), strtolower($alerts)) !== false) {
+                $this->fppApiService->runWeatherDelay();
+                error_log("Stopping show due to alert condition(s) being met. " . print_r($alerts));
+            }
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
+            return;
+        }
+
+        $this->lastAlertsCheckTime = $this->currentTime;
+    }
 }
 
-
+$monitor = new WeatherMonitorWorker();
 while (true) {
-    $currentTime = time();
-
-    updateStationIdSettings();
-    getWeatherObservations();
-    getForecastObservation();
-    getWeatherAlerts();
+    $monitor->updateCurrentTime();
+    $monitor->updateStationIdSettings();
+    $monitor->getWeatherObservations();
+    $monitor->getForecastObservation();
+    $monitor->getWeatherAlerts();
 }

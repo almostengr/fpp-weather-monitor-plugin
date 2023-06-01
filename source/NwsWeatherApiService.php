@@ -4,17 +4,13 @@ require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseApiS
 
 define("NWS_API", "https://api.weather.gov/");
 
-interface WeatherApiServiceInterface
-{
-    public function getLatestObservations(): ObservationModel;
-}
-
-interface NwsWeatherApiServiceInterface extends WeatherApiServiceInterface
+interface NwsWeatherApiServiceInterface
 {
     public function getPointsDetailsFromGpsCoordinates();
     public function getStationIdFromPointsResponse($pointsResponse): string;
     public function getAlertZoneIdFromPointsResponse($pointsResponse): string;
     public function getForecast(): ObservationModel;
+    public function getLatestObservations(): ObservationModel;
 }
 
 final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApiServiceInterface
