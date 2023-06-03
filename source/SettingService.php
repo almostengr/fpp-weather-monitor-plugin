@@ -1,6 +1,6 @@
 <?php
 
-require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/BaseService.php');
+require_once('/home/fpp/media/plugins/fpp-weather-monitor-plugin/source/SettingRepository.php');
 
 interface SettingServiceInterface
 {
@@ -124,24 +124,3 @@ final class SettingService extends BaseService implements SettingServiceInterfac
     }
 }
 
-
-interface SettingRepositoryInterface
-{
-    public function getSetting(string $key): string;
-    public function createUpdateSetting(string $key, string $value): void;
-}
-
-final class SettingRepository implements SettingRepositoryInterface
-{
-    public function getSetting(string $key): string
-    {
-        $value = ReadSettingFromFile($key, WM_PLUGIN_NAME);
-        return str_replace("_", " ", $value);
-    }
-
-    public function createUpdateSetting(string $key, string $value): void
-    {
-        $value = str_replace(" ", "_", $value);
-        WriteSettingToFile($key, $value, WM_PLUGIN_NAME);
-    }
-}

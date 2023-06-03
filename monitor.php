@@ -31,10 +31,12 @@ final class WeatherMonitorWorker
         $this->nwsWeatherService = new NwsApiWeatherService($this->settingService);
     }
 
+
     public function updateCurrentTime()
     {
         $this->currentTime = time();
     }
+
 
     public function updateStationIdSettings(): void
     {
@@ -142,6 +144,7 @@ final class WeatherMonitorWorker
         $this->lastAlertsCheckTime = $this->currentTime;
     }
 }
+
 
 $monitor = new WeatherMonitorWorker();
 while (true) {

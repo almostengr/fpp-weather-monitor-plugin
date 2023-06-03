@@ -77,7 +77,7 @@ final class NwsApiWeatherService extends BaseApiService implements NwsWeatherApi
 
     public function getForecast(): ObservationModel
     {
-        $route = NWS_API . "/zones/forecast/" . $this->settingService->getSetting(NWS_WEATHER_ALERT_ZONE) . "/observations";
+        $route = NWS_API . "zones/forecast/" . $this->settingService->getSetting(NWS_WEATHER_ALERT_ZONE) . "/observations";
         $response = $this->callAPI(GET, $route, array(), $this->getHeaders(), $this->userAgent());
 
         foreach ($response->features as $feature) {

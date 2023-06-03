@@ -153,7 +153,6 @@ if (!empty($_POST)) {
       </div>
     </div>
 
-
     <button class="buttons my-3" type="submit">Save Settings</button>
   </form>
 </body>
